@@ -21,6 +21,7 @@ public class Card : MonoBehaviour
     [SerializeField] SpriteRenderer spriteCards;
     [SerializeField] SpriteRenderer spriteCards2;
 
+    [SerializeField] Collider2D Collider2D;
 
     public ItemData itemdata;
 
@@ -29,26 +30,15 @@ public class Card : MonoBehaviour
 
     public PRS originPRS; // 카드 원본위치를 담은 PRS 클래스
 
+    [SerializeField] SuitIDdata SuitIDdata;
+
+
     // 모든 텍스쳐를 다 넣어둘 배열
-    Sprite [] sprites;
+    Sprite[] sprites;
 
-    // 이벤트 선언 -> 에디터에서 함수 연결함
-    public UnityEvent onEventTrggered;
-
-    private void Start()
+    private void Awake()
     {
-        if(onEventTrggered == null)
-        {
-            onEventTrggered = new UnityEvent();
-        }
-    }
-
-    private void OnMouseDown()
-    {
-        if(onEventTrggered != null)
-        {
-            onEventTrggered.Invoke();
-        }    
+        Collider2D = GetComponent<Collider2D>();
     }
 
     public void Setup(ItemData item)
@@ -94,23 +84,25 @@ public class Card : MonoBehaviour
             transform.rotation = prs.rot;
             transform.localScale = prs.scale;
         }
-    }
+    }   
 
-    public String SuitData()
+
+    public void OnMouseDown()
     {
-        Debug.Log("문양 반환");
-        return itemdata.suit;
+        if(PokerManager.Instance.SuitIDdata.Count < 5)
+        {
+            Debug.Log("카드가 클릭됨");
+            SuitIDdata suitidData = new SuitIDdata(itemdata.suit, itemdata.id );
+
+            if (PokerManager.Instance != null)
+            {
+                PokerManager.Instance.SaveSuitIDdata(suitidData);
+            }
+        }
+        else
+        {
+            Debug.Log("더이상 카드를 누를 수 없음");
+        }
+
     }
-
-    public int NumData()
-    {
-        Debug.Log("숫자 반환");
-        return itemdata.id;
-    }
-
-    public void ReturnData()
-    {
-        PokerManager.Inst.dictionary.Add(SuitData(), NumData());
-    }    
-
 }

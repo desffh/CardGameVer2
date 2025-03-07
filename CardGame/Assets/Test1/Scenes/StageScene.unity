@@ -388,7 +388,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 388006296}
-  - component: {fileID: 388006295}
+  - component: {fileID: 388006297}
   m_Layer: 0
   m_Name: PokerManager
   m_TagString: Untagged
@@ -396,24 +396,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &388006295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388006294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f55ce062c522a94eaae4d8d3140531a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  card: {fileID: -6056702233427692128, guid: f8573787955db2e4d859aea5ce3199d5, type: 3}
-  itemData:
-    name: 
-    id: 0
-    suit: 
-    front: 
 --- !u!4 &388006296
 Transform:
   m_ObjectHideFlags: 0
@@ -429,6 +411,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &388006297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388006294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f55ce062c522a94eaae4d8d3140531a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SuitIDdata: []
 --- !u!1 &410771743
 GameObject:
   m_ObjectHideFlags: 0
