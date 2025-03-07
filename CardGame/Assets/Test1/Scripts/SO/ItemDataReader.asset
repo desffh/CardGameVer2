@@ -1,0 +1,227 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e84a17e3a6072744b73445edb38a722, type: 3}
+  m_Name: ItemDataReader
+  m_EditorClassIdentifier: 
+  associatedSheet: 1Wj-NhHOCt8KN1YjZ6-hHP5KF8mozMdXT5zwoziEVQEc
+  associatedWorksheet: Sheet1
+  START_ROW_LENGTH: 2
+  END_ROW_LENGTH: 53
+  DataList:
+  - name: "\uD558\uD2B81"
+    id: 11
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_26
+  - name: "\uD558\uD2B82"
+    id: 2
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_27
+  - name: "\uD558\uD2B83"
+    id: 3
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_28
+  - name: "\uD558\uD2B84"
+    id: 4
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_29
+  - name: "\uD558\uD2B85"
+    id: 5
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_30
+  - name: "\uD558\uD2B86"
+    id: 6
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_31
+  - name: "\uD558\uD2B87"
+    id: 7
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_32
+  - name: "\uD558\uD2B88"
+    id: 8
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_33
+  - name: "\uD558\uD2B89"
+    id: 9
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_34
+  - name: "\uD558\uD2B810"
+    id: 10
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_35
+  - name: "\uD558\uD2B8\uC7AD"
+    id: 10
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_36
+  - name: "\uD558\uD2B8\uD038"
+    id: 10
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_37
+  - name: "\uD558\uD2B8\uD0B9"
+    id: 10
+    suit: "\uD558\uD2B8"
+    front: card_list_2d_38
+  - name: "\uC2A4\uD398\uC774\uB4DC1"
+    id: 11
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_0
+  - name: "\uC2A4\uD398\uC774\uB4DC2"
+    id: 2
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_1
+  - name: "\uC2A4\uD398\uC774\uB4DC3"
+    id: 3
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_2
+  - name: "\uC2A4\uD398\uC774\uB4DC4"
+    id: 4
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_3
+  - name: "\uC2A4\uD398\uC774\uB4DC5"
+    id: 5
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_4
+  - name: "\uC2A4\uD398\uC774\uB4DC6"
+    id: 6
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_5
+  - name: "\uC2A4\uD398\uC774\uB4DC7"
+    id: 7
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_6
+  - name: "\uC2A4\uD398\uC774\uB4DC8"
+    id: 8
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_7
+  - name: "\uC2A4\uD398\uC774\uB4DC9"
+    id: 9
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_8
+  - name: "\uC2A4\uD398\uC774\uB4DC10"
+    id: 10
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_9
+  - name: "\uC2A4\uD398\uC774\uB4DC\uC7AD"
+    id: 10
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_10
+  - name: "\uC2A4\uD398\uC774\uB4DC\uD038"
+    id: 10
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_11
+  - name: "\uC2A4\uD398\uC774\uB4DC\uD0B9"
+    id: 10
+    suit: "\uC2A4\uD398\uC774\uB4DC"
+    front: card_list_2d_12
+  - name: "\uB2E4\uC774\uC5441"
+    id: 11
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_13
+  - name: "\uB2E4\uC774\uC5442"
+    id: 2
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_14
+  - name: "\uB2E4\uC774\uC5443"
+    id: 3
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_15
+  - name: "\uB2E4\uC774\uC5444"
+    id: 4
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_16
+  - name: "\uB2E4\uC774\uC5445"
+    id: 5
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_17
+  - name: "\uB2E4\uC774\uC5446"
+    id: 6
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_18
+  - name: "\uB2E4\uC774\uC5447"
+    id: 7
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_19
+  - name: "\uB2E4\uC774\uC5448"
+    id: 8
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_20
+  - name: "\uB2E4\uC774\uC5449"
+    id: 9
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_21
+  - name: "\uB2E4\uC774\uC54410"
+    id: 10
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_22
+  - name: "\uB2E4\uC774\uC544\uC7AD"
+    id: 10
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_23
+  - name: "\uB2E4\uC774\uC544\uD038"
+    id: 10
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_24
+  - name: "\uB2E4\uC774\uC544\uD0B9"
+    id: 10
+    suit: "\uB2E4\uC774\uC544"
+    front: card_list_2d_25
+  - name: "\uD074\uB85C\uBC841"
+    id: 11
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_39
+  - name: "\uD074\uB85C\uBC842"
+    id: 2
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_40
+  - name: "\uD074\uB85C\uBC843"
+    id: 3
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_41
+  - name: "\uD074\uB85C\uBC844"
+    id: 4
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_42
+  - name: "\uD074\uB85C\uBC845"
+    id: 5
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_43
+  - name: "\uD074\uB85C\uBC846"
+    id: 6
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_44
+  - name: "\uD074\uB85C\uBC847"
+    id: 7
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_45
+  - name: "\uD074\uB85C\uBC848"
+    id: 8
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_46
+  - name: "\uD074\uB85C\uBC849"
+    id: 9
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_47
+  - name: "\uD074\uB85C\uBC8410"
+    id: 10
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_48
+  - name: "\uD074\uB85C\uBC84\uC7AD"
+    id: 10
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_49
+  - name: "\uD074\uB85C\uBC84\uD038"
+    id: 10
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_50
+  - name: "\uD074\uB85C\uBC84\uD0B9"
+    id: 10
+    suit: "\uD074\uB85C\uBC84"
+    front: card_list_2d_51

@@ -1,0 +1,116 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using DG.Tweening;
+using UnityEngine.UIElements;
+using UnityEngine.U2D;
+using System.Linq;
+using Newtonsoft.Json.Bson;
+using UnityEngine.Events;
+using System;
+
+// Card에 들어갈 스크립트
+public class Card : MonoBehaviour
+{
+    [SerializeField] SpriteRenderer card; // 앞면
+    [SerializeField] SpriteRenderer cardBack; // 뒷면은 통일
+
+    [SerializeField] Sprite cardback; // 뒷면 이미지
+    [SerializeField] Sprite cardFront;
+
+    [SerializeField] SpriteRenderer spriteCards;
+    [SerializeField] SpriteRenderer spriteCards2;
+
+
+    public ItemData itemdata;
+
+    public string spriteSheetName;
+    public string spriteNameToLoad;
+
+    public PRS originPRS; // 카드 원본위치를 담은 PRS 클래스
+
+    // 모든 텍스쳐를 다 넣어둘 배열
+    Sprite [] sprites;
+
+    // 이벤트 선언 -> 에디터에서 함수 연결함
+    public UnityEvent onEventTrggered;
+
+    private void Start()
+    {
+        if(onEventTrggered == null)
+        {
+            onEventTrggered = new UnityEvent();
+        }
+    }
+
+    private void OnMouseDown()
+    {
+        if(onEventTrggered != null)
+        {
+            onEventTrggered.Invoke();
+        }    
+    }
+
+    public void Setup(ItemData item)
+    {
+        spriteCards = transform.GetChild(0).GetComponent<SpriteRenderer>();
+
+        this.itemdata = item;
+        // 카드 스프라이트 이름 받아옴
+        string spriteName = item.front;
+
+        // 모든 스프라이트 배열에 다 넣기
+        sprites = Resources.LoadAll<Sprite>(spriteSheetName);
+
+
+        if (sprites.Length > 0)
+        {
+            Sprite selctedSprite = sprites.FirstOrDefault(s => s.name == spriteName);
+
+            if (selctedSprite != null)
+            {
+                spriteCards.sprite = selctedSprite;  // 선택한 스프라이트를 카드에 적용
+            }
+        }
+
+        if(cardback != null)
+        {
+            spriteCards2 = transform.GetChild(1).GetComponent<SpriteRenderer>();
+            cardBack.sprite = cardback;
+        }
+    }
+
+    public void MoveTransform(PRS prs, bool useDotween, float dotweenTime = 0)
+    {
+        if (useDotween)
+        {
+            transform.DOMove(prs.pos, dotweenTime);
+            transform.DORotateQuaternion(prs.rot, dotweenTime);
+            transform.DOScale(prs.scale, dotweenTime);
+        }
+        else
+        {
+            transform.position = prs.pos;
+            transform.rotation = prs.rot;
+            transform.localScale = prs.scale;
+        }
+    }
+
+    public String SuitData()
+    {
+        Debug.Log("문양 반환");
+        return itemdata.suit;
+    }
+
+    public int NumData()
+    {
+        Debug.Log("숫자 반환");
+        return itemdata.id;
+    }
+
+    public void ReturnData()
+    {
+        PokerManager.Inst.dictionary.Add(SuitData(), NumData());
+    }    
+
+}
