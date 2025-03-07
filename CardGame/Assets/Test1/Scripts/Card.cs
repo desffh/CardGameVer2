@@ -84,25 +84,31 @@ public class Card : MonoBehaviour
             transform.rotation = prs.rot;
             transform.localScale = prs.scale;
         }
-    }   
+    }
 
+    [SerializeField] private bool checkCard = false;
 
+    // 마우스로 클릭하면 리스트에 카드 넣기 (최대5개)
     public void OnMouseDown()
     {
-        if(PokerManager.Instance.SuitIDdata.Count < 5)
-        {
-            Debug.Log("카드가 클릭됨");
-            SuitIDdata suitidData = new SuitIDdata(itemdata.suit, itemdata.id );
+        Debug.Log("카드가 클릭됨");
 
-            if (PokerManager.Instance != null)
-            {
-                PokerManager.Instance.SaveSuitIDdata(suitidData);
-            }
+        SuitIDdata suitidData = new SuitIDdata(itemdata.suit, itemdata.id);
+
+        if (checkCard && PokerManager.Instance.SuitIDdata.Count <= 5)
+        {
+            PokerManager.Instance.RemoveSuitIDdata(suitidData);
+            checkCard = false;
+        }
+        else if(PokerManager.Instance.SuitIDdata.Count < 5)
+        {
+            PokerManager.Instance.SaveSuitIDdata(suitidData);
+            checkCard = true;
         }
         else
         {
             Debug.Log("더이상 카드를 누를 수 없음");
         }
-
     }
+
 }

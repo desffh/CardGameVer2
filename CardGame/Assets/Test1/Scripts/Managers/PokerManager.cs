@@ -46,20 +46,31 @@ public class PokerManager : MonoBehaviour
     {
         SuitIDdata.Add(newSuitIDdata);
         Debug.Log(SuitIDdata.Count); // 리스트의 크기
+        
 
-        // 리스트의 수가 5가 되었다면 리스트 정렬
-        if(SuitIDdata.Count == 5)
-        {
-            // LinQ메서드를 사용한 오름차순정렬
-            SuitIDdata = SuitIDdata.OrderBy(x => x.id).ToList();
+        // LinQ메서드를 사용한 오름차순정렬
+        SuitIDdata = SuitIDdata.OrderBy(x => x.id).ToList();
 
-            // for (int i = 0; i < SuitIDdata.Count; i++)
-            // {
-            //     Debug.Log(SuitIDdata[i].id);
-            // }
-        }
+        // for (int i = 0; i < SuitIDdata.Count; i++)
+        // {
+        //     Debug.Log(SuitIDdata[i].id);
+        // }
+        
     }
     
+    public void RemoveSuitIDdata(SuitIDdata newSuitIDdata)
+    {
+        Debug.Log("데이터 빼기");
+
+        // 리스트에서 같은 suit, id 값을 가진 객체 찾기
+        SuitIDdata existingData = SuitIDdata.Find(x => x.suit == newSuitIDdata.suit && x.id == newSuitIDdata.id);
+
+
+        SuitIDdata.Remove(existingData);
+        Debug.Log("카드가 리스트에서 제거됨");
+
+    }
+
     // 숫자가 몇번 등장하는지 저장할 딕셔너리 (숫자, 몇번 등장하는지)
     [SerializeField] private Dictionary<int, int> dictionary;
 
