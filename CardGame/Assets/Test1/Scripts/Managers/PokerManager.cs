@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -27,59 +28,80 @@ public class PokerManager : MonoBehaviour
     private static PokerManager instance;
     public static PokerManager Instance { get { return instance; } }
 
+    // 저장해둘 숫자
+    [SerializeField] public List<int> saveNum;
+
+    // 숫자가 몇번 등장하는지 저장할 딕셔너리 (숫자, 몇번 등장하는지)
+    [SerializeField] private Dictionary<int, int> dictionary;
+    
     private void Awake()
     {
+        saveNum = new List<int>();
+
+        dictionary = new Dictionary<int, int>();
+
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
+            return;
         }
     }
 
-   
+    // 활성화 된 카드의 숫자를 넣을 큐
+
+    private void Start()
+    {
+
+
+    }
 
     // 값을 가져오고 리스트에 저장 (순차적으로)
     public void SaveSuitIDdata(SuitIDdata newSuitIDdata)
     {
-        SuitIDdata.Add(newSuitIDdata);
-        Debug.Log(SuitIDdata.Count); // 리스트의 크기
-        
+        SuitIDdata.Add(newSuitIDdata);   
 
-        // LinQ메서드를 사용한 오름차순정렬
+        // LinQ메서드를 사용한 오름차순정렬 (value 값 (숫자 갯수) 기준으로)
         SuitIDdata = SuitIDdata.OrderBy(x => x.id).ToList();
+
+        Debug.Log(saveNum.Count); // 카운트가 0 미만이면 출력 x
+        
 
         // for (int i = 0; i < SuitIDdata.Count; i++)
         // {
         //     Debug.Log(SuitIDdata[i].id);
         // }
-        
+
     }
     
     public void RemoveSuitIDdata(SuitIDdata newSuitIDdata)
     {
-        Debug.Log("데이터 빼기");
-
         // 리스트에서 같은 suit, id 값을 가진 객체 찾기
         SuitIDdata existingData = SuitIDdata.Find(x => x.suit == newSuitIDdata.suit && x.id == newSuitIDdata.id);
-
-
         SuitIDdata.Remove(existingData);
-        Debug.Log("카드가 리스트에서 제거됨");
 
     }
 
-    // 숫자가 몇번 등장하는지 저장할 딕셔너리 (숫자, 몇번 등장하는지)
-    [SerializeField] private Dictionary<int, int> dictionary;
 
     // 저장된 모든 카드를 순회 (최대 5개)
     public Dictionary<int,int> Hand()
     {
+        dictionary.Clear();
+
         for (int i = 0; i < SuitIDdata.Count; i++)
         {
-            dictionary[SuitIDdata[i].id]++;
+            if (dictionary.ContainsKey(SuitIDdata[i].id))
+            {
+                dictionary[SuitIDdata[i].id]++;
+            }
+            else
+            {
+                dictionary[SuitIDdata[i].id] = 1;
+            }
         }
         return dictionary;
     }
@@ -100,9 +122,10 @@ public class PokerManager : MonoBehaviour
     }
 
     // 플러시인지 확인 (ex 다이아 5개)
-    bool isFlush()
+    public bool isFlush()
     {
         // Suit타입을 저장할 변수
+        
         string firstSuit = SuitIDdata[0].suit;
         for (int i = 0; i < SuitIDdata.Count; i++)
         {
@@ -115,89 +138,153 @@ public class PokerManager : MonoBehaviour
         return true;
     }
 
-    /*
+    
     // 핸드의 종류 확인
-    string getHandType()
+    public void getHandType()
     {
+        saveNum.Clear();
+
         // 반환된 숫자 카운트 저장
         Dictionary <int,int> rankCount = Hand();
-        bool flush = isFlush();
-        bool straight = isStraight();
 
-        if (straight && flush)
+        bool flush = false;
+        bool straight = false;
+
+        if (SuitIDdata.Count > 0)
         {
-            // 스트레이트 플러시
-            if (SuitIDdata[0].id == 10)
+            flush = isFlush();
+            straight = isStraight();
+        }
+
+        var lastElement = rankCount.LastOrDefault(); // 마지막 요소
+        var firstElement = rankCount.FirstOrDefault(); // 처음 요소
+
+
+        // 스트레이트 플러시 및 로얄 스트레이트 플러시 처리
+        if (SuitIDdata.Count == 5)
+        {
+            if (straight && flush)
             {
-                return "Royal Flush";
+                if (SuitIDdata[0].id == 10)
+                {
+                    // 로얄 스트레이트 플러시: 10, J, Q, K, A
+                    saveNum.Add(lastElement.Key);  // 로얄 스트레이트 플러시
+                    Debug.Log("로얄 스트레이트 플러시");
+                }
+                else
+                {
+                    // 스트레이트 플러시
+                    for (int i = 0; i < SuitIDdata.Count; i++)
+                    {
+                        saveNum.Add(SuitIDdata[i].id);
+                    }
+                    Debug.Log("스트레이트 플러시");
+                }
+                return;
             }
-            else
+
+            // 플러시
+            if (flush)
             {
-                return "Straight Flush";
+                for (int i = 0; i < SuitIDdata.Count; i++)
+                {
+                    saveNum.Add(SuitIDdata[i].id);
+                }
+                Debug.Log("플러시");
+                return;
+            }
+
+            // 스트레이트
+            if (straight)
+            {
+                for (int i = 0; i < SuitIDdata.Count; i++)
+                {
+                    saveNum.Add(SuitIDdata[i].id);
+                }
+                Debug.Log("스트레이트");
+                return;
+            }
+
+            // 풀 하우스, 포카드 처리
+            if (rankCount.Count() == 2)
+            {
+                if (lastElement.Value == 4)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        saveNum.Add(lastElement.Key);  // 포카드
+                    }
+                    Debug.Log("포카드");
+                }
+                else if (firstElement.Value == 4)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        saveNum.Add(firstElement.Key);  // 포카드
+                    }
+                    Debug.Log("포카드");
+                }
+                else
+                {
+                    saveNum.Add(firstElement.Key);  // 풀 하우스 (3장, 2장)
+                    saveNum.Add(lastElement.Key);
+                    Debug.Log("풀 하우스");
+                }
+                return;
             }
         }
 
-        var lastElement = rankCount.LastOrDefault();
-
-        // 크기가 2면, 서로 다른 숫자 2개 뿐이라는 것 (1, 4) (2, 3)
-        if (rankCount.Count() == 2)
+        // 트리플 처리
+        if (rankCount.Values.Contains(3))
         {
-            // 풀 하우스 또는 포카드
-            if (lastElement.Value == 4)
+            // 3과 똑같은 벨류값을 가진애 찾기
+            foreach (var item in rankCount.Where(x => x.Value == 3))
             {
-                // 키 값을 저장 해야함
-                rankCount;
-                return "Four of a Kind";
-
+                for (int i = 0; i < 3; i++)
+                {
+                    saveNum.Add(item.Key);
+                }
             }
-            else if (rankCount.end()->second == 4)
-            {
-                rankCount.end()->first;
-                return "Four of a Kind";
-            }
-            else
-            {
-                return "Full House";
-            }
-        }
-        if (flush)
-        {
-            return "Flush";
+            Debug.Log("트리플");
+            return;
         }
 
-        if (straight)
+        // 투페어 처리
+        if (rankCount.Values.Count(v => v == 2) == 2)
         {
-            return "Straight";
-        }
-
-        if (rankCount.Count() == 3) // (3, 1, 1) (2, 2, 1)
-        {
-            // 트리플 또는 투페어
-            if (rankCount.begin()->second == 3
-                || (--rankCount.end())->second == 3)
+            foreach (var item in rankCount.Where(x => x.Value == 2))
             {
-                return "Three of a Kind";
+                for (int i = 0; i < 2; i++)
+                {
+                    saveNum.Add(item.Key);
+                }
             }
-            else
+            Debug.Log("투 페어");
+            return;
+        }
+
+        // 원페어 처리
+        if (rankCount.Values.Contains(2))
+        {
+            foreach (var item in rankCount.Where(x => x.Value == 2))
             {
-                return "Two Pair";
+                for (int i = 0; i < 2; i++)
+                {
+                    saveNum.Add(item.Key);
+                }
             }
+            Debug.Log("원 페어");
+            return;
         }
 
-        // 한자리에 2카운트가 되어있는 상태 (2,1,1,1)
-        if (rankCount.Count() == 4)
+        // 하이 카드 처리
+        if (SuitIDdata.Count != 0)
         {
-            return "One Pair";
-        }
-
-        else
-        {
-            Debug.Log("가장 높은 수의 값 : " +
-                SuitIDdata[4].id); // 정렬된 상태에서 마지막 인덱스
-            return "High Card";
+            saveNum.Add(lastElement.Key); // 가장 큰 값
+            Debug.Log("하이 카드: " + lastElement.Key);
+            return;
         }
     }
-    */
     
     
 }

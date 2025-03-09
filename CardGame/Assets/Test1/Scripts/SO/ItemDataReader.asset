@@ -18,7 +18,7 @@ MonoBehaviour:
   END_ROW_LENGTH: 53
   DataList:
   - name: "\uD558\uD2B81"
-    id: 11
+    id: 14
     suit: "\uD558\uD2B8"
     front: card_list_2d_26
   - name: "\uD558\uD2B82"
@@ -58,19 +58,19 @@ MonoBehaviour:
     suit: "\uD558\uD2B8"
     front: card_list_2d_35
   - name: "\uD558\uD2B8\uC7AD"
-    id: 10
+    id: 11
     suit: "\uD558\uD2B8"
     front: card_list_2d_36
   - name: "\uD558\uD2B8\uD038"
-    id: 10
+    id: 12
     suit: "\uD558\uD2B8"
     front: card_list_2d_37
   - name: "\uD558\uD2B8\uD0B9"
-    id: 10
+    id: 13
     suit: "\uD558\uD2B8"
     front: card_list_2d_38
   - name: "\uC2A4\uD398\uC774\uB4DC1"
-    id: 11
+    id: 14
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_0
   - name: "\uC2A4\uD398\uC774\uB4DC2"
@@ -110,19 +110,19 @@ MonoBehaviour:
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_9
   - name: "\uC2A4\uD398\uC774\uB4DC\uC7AD"
-    id: 10
+    id: 11
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_10
   - name: "\uC2A4\uD398\uC774\uB4DC\uD038"
-    id: 10
+    id: 12
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_11
   - name: "\uC2A4\uD398\uC774\uB4DC\uD0B9"
-    id: 10
+    id: 13
     suit: "\uC2A4\uD398\uC774\uB4DC"
     front: card_list_2d_12
   - name: "\uB2E4\uC774\uC5441"
-    id: 11
+    id: 14
     suit: "\uB2E4\uC774\uC544"
     front: card_list_2d_13
   - name: "\uB2E4\uC774\uC5442"
@@ -162,19 +162,19 @@ MonoBehaviour:
     suit: "\uB2E4\uC774\uC544"
     front: card_list_2d_22
   - name: "\uB2E4\uC774\uC544\uC7AD"
-    id: 10
+    id: 11
     suit: "\uB2E4\uC774\uC544"
     front: card_list_2d_23
   - name: "\uB2E4\uC774\uC544\uD038"
-    id: 10
+    id: 12
     suit: "\uB2E4\uC774\uC544"
     front: card_list_2d_24
   - name: "\uB2E4\uC774\uC544\uD0B9"
-    id: 10
+    id: 13
     suit: "\uB2E4\uC774\uC544"
     front: card_list_2d_25
   - name: "\uD074\uB85C\uBC841"
-    id: 11
+    id: 14
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_39
   - name: "\uD074\uB85C\uBC842"
@@ -214,14 +214,14 @@ MonoBehaviour:
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_48
   - name: "\uD074\uB85C\uBC84\uC7AD"
-    id: 10
+    id: 11
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_49
   - name: "\uD074\uB85C\uBC84\uD038"
-    id: 10
+    id: 12
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_50
   - name: "\uD074\uB85C\uBC84\uD0B9"
-    id: 10
+    id: 13
     suit: "\uD074\uB85C\uBC84"
     front: card_list_2d_51

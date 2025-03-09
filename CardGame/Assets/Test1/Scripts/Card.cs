@@ -90,8 +90,7 @@ public class Card : MonoBehaviour
 
     // 마우스로 클릭하면 리스트에 카드 넣기 (최대5개)
     public void OnMouseDown()
-    {
-        Debug.Log("카드가 클릭됨");
+    { 
 
         SuitIDdata suitidData = new SuitIDdata(itemdata.suit, itemdata.id);
 
@@ -108,6 +107,15 @@ public class Card : MonoBehaviour
         else
         {
             Debug.Log("더이상 카드를 누를 수 없음");
+        }
+
+        
+        if (PokerManager.Instance.SuitIDdata.Count >= 0)
+        {
+            PokerManager.Instance.Hand();
+            PokerManager.Instance.getHandType();
+            Debug.Log(PokerManager.Instance.saveNum.Count); // 카운트가 0 미만이면 출력 x
+
         }
     }
 
