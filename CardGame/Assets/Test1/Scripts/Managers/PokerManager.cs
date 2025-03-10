@@ -2,21 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.XR;
 
 [Serializable]
 public struct SuitIDdata
 {
     public string suit;
     public int id;
+    public GameObject Cardclone;
 
-    public SuitIDdata(string suit, int id)
+    public SuitIDdata(string suit, int id, GameObject cardclone)
     {
         this.suit = suit;
         this.id = id;
+        this.Cardclone = cardclone;
     }
 }
 
@@ -33,7 +32,7 @@ public class PokerManager : MonoBehaviour
 
     // 숫자가 몇번 등장하는지 저장할 딕셔너리 (숫자, 몇번 등장하는지)
     [SerializeField] private Dictionary<int, int> dictionary;
-    
+
     private void Awake()
     {
         saveNum = new List<int>();
@@ -63,13 +62,13 @@ public class PokerManager : MonoBehaviour
     // 값을 가져오고 리스트에 저장 (순차적으로)
     public void SaveSuitIDdata(SuitIDdata newSuitIDdata)
     {
-        SuitIDdata.Add(newSuitIDdata);   
+        SuitIDdata.Add(newSuitIDdata);
 
         // LinQ메서드를 사용한 오름차순정렬 (value 값 (숫자 갯수) 기준으로)
         SuitIDdata = SuitIDdata.OrderBy(x => x.id).ToList();
 
         Debug.Log(saveNum.Count); // 카운트가 0 미만이면 출력 x
-        
+
 
         // for (int i = 0; i < SuitIDdata.Count; i++)
         // {
@@ -77,7 +76,7 @@ public class PokerManager : MonoBehaviour
         // }
 
     }
-    
+
     public void RemoveSuitIDdata(SuitIDdata newSuitIDdata)
     {
         // 리스트에서 같은 suit, id 값을 가진 객체 찾기
@@ -88,7 +87,7 @@ public class PokerManager : MonoBehaviour
 
 
     // 저장된 모든 카드를 순회 (최대 5개)
-    public Dictionary<int,int> Hand()
+    public Dictionary<int, int> Hand()
     {
         dictionary.Clear();
 
@@ -125,7 +124,7 @@ public class PokerManager : MonoBehaviour
     public bool isFlush()
     {
         // Suit타입을 저장할 변수
-        
+
         string firstSuit = SuitIDdata[0].suit;
         for (int i = 0; i < SuitIDdata.Count; i++)
         {
@@ -138,14 +137,14 @@ public class PokerManager : MonoBehaviour
         return true;
     }
 
-    
+
     // 핸드의 종류 확인
     public void getHandType()
     {
         saveNum.Clear();
 
         // 반환된 숫자 카운트 저장
-        Dictionary <int,int> rankCount = Hand();
+        Dictionary<int, int> rankCount = Hand();
 
         bool flush = false;
         bool straight = false;
@@ -285,6 +284,6 @@ public class PokerManager : MonoBehaviour
             return;
         }
     }
-    
-    
+
+
 }

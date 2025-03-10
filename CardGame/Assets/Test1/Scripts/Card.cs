@@ -92,7 +92,7 @@ public class Card : MonoBehaviour
     public void OnMouseDown()
     { 
 
-        SuitIDdata suitidData = new SuitIDdata(itemdata.suit, itemdata.id);
+        SuitIDdata suitidData = new SuitIDdata(itemdata.suit, itemdata.id, this.gameObject);
 
         if (checkCard && PokerManager.Instance.SuitIDdata.Count <= 5)
         {

@@ -39,7 +39,7 @@ public class KardManager : MonoBehaviour
     void SetupItemBuffer()
     {
         // 크기 동적할당
-        itemBuffer = new List<ItemData>(52); // 미리 용량을 100 잡아두기
+        itemBuffer = new List<ItemData>(52); // 미리 용량을 잡아두기
 
         for (int i = 0; i < 52; i++)
         {
