@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -52,15 +53,17 @@ public class ButtonManager : MonoBehaviour
         {
             // 저장된 프리팹의 위치값을 변경하기 위해 컴포넌트 가져오기
             PokerManager.Instance.SuitIDdata[i].Cardclone.GetComponent<Transform>();
+            
             // 위치를 HandCardPoints로 이동
-            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.position 
-                = HandCardPoints.HandCardpos[i].transform.position;
+            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
+                DOMove(HandCardPoints.HandCardpos[i].transform.position, 0.7f);
+           // 회전 0
             PokerManager.Instance.SuitIDdata[i].Cardclone.transform.rotation = Quaternion.identity;
-           
+        
         }
         // 더하기 계산
-        GameManager.Instance.CalSetting();
-
+        GameManager.Instance.Calculation();
+        
     }
 
     // 버리기를 클릭했을 때
@@ -71,8 +74,11 @@ public class ButtonManager : MonoBehaviour
             // 저장된 프리팹의 위치값을 변경하기 위해 컴포넌트 가져오기
             PokerManager.Instance.SuitIDdata[i].Cardclone.GetComponent<Transform>();
             // 위치를 HandCardPoints로 이동
-            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.position
-                = HandCardPoints.DeleteCardpos.transform.position;
+            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
+                DOMove(HandCardPoints.DeleteCardpos.transform.position, 1);
+            // 회전 0
+            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
+                DORotate(new Vector3(58, 122, 71), 3);
         }
     }
 }

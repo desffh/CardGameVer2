@@ -54,6 +54,7 @@ MonoBehaviour:
   cardFront: {fileID: 21300110, guid: 3924dd0449c173e4aa69d07bdb73d5ed, type: 3}
   spriteCards: {fileID: 0}
   spriteCards2: {fileID: 0}
+  Collider2D: {fileID: 0}
   itemdata:
     name: 
     id: 0
@@ -65,6 +66,11 @@ MonoBehaviour:
     pos: {x: 0, y: 0, z: 0}
     rot: {x: 0, y: 0, z: 0, w: 0}
     scale: {x: 0, y: 0, z: 0}
+  SuitIDdata:
+    suit: 
+    id: 0
+    Cardclone: {fileID: 0}
+  checkCard: 0
 --- !u!114 &-982333530242807510
 MonoBehaviour:
   m_ObjectHideFlags: 0

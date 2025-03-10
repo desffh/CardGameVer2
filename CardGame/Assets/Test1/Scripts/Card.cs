@@ -12,6 +12,8 @@ using System;
 // Card에 들어갈 스크립트
 public class Card : MonoBehaviour
 {
+    private Transform cardPrefabs;
+
     [SerializeField] SpriteRenderer card; // 앞면
     [SerializeField] SpriteRenderer cardBack; // 뒷면은 통일
 
@@ -39,6 +41,8 @@ public class Card : MonoBehaviour
     private void Awake()
     {
         Collider2D = GetComponent<Collider2D>();
+
+        cardPrefabs = GetComponent<Transform>();
     }
 
     public void Setup(ItemData item)
@@ -85,12 +89,17 @@ public class Card : MonoBehaviour
             transform.localScale = prs.scale;
         }
     }
-
+    
     [SerializeField] private bool checkCard = false;
 
     // 마우스로 클릭하면 리스트에 카드 넣기 (최대5개)
     public void OnMouseDown()
-    { 
+    {
+        //cardPrefabs.DORotate(new Vector3(0, 0, 10f), 0.2f);
+        // 카드를 클릭하면 애니메이션
+        cardPrefabs.DOScale(new Vector3(0.65f, 0.65f, 0.65f), 0.1f).
+            OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.2f); });
+
 
         SuitIDdata suitidData = new SuitIDdata(itemdata.suit, itemdata.id, this.gameObject);
 
@@ -118,5 +127,8 @@ public class Card : MonoBehaviour
 
         }
     }
+
+    
+
 
 }

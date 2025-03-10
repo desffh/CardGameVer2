@@ -253,15 +253,16 @@ namespace GoogleSheetsToUnity.ThirdPary
                         // These dont make sense in editor, so we will treat them the same as a null return...
                         isWaiting = false;
                     }
-                    else if (currentType == typeof(WWW))
+                    else if (currentType == typeof(UnityWebRequestAsyncOperation))
                     {
-                        // Web download request, lets see if its done!
-                        var www = current as WWW;
-                        if (!www.isDone)
+                        // Web request (UnityWebRequest), lets see if its done!
+                        var webRequest = current as UnityWebRequestAsyncOperation;
+                        if (!webRequest.isDone)
                         {
                             isWaiting = true;
                         }
                     }
+
                     else if (currentType == typeof(UnityWebRequestAsyncOperation))
                     {
                         var webRequest = current as UnityWebRequestAsyncOperation;

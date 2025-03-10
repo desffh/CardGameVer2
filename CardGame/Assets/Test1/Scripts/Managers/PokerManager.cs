@@ -140,11 +140,13 @@ public class PokerManager : MonoBehaviour
         return true;
     }
 
-
     // 핸드의 종류 확인
     public void getHandType()
     {
         saveNum.Clear();
+        GameManager.Instance.Plussum = 0;
+        GameManager.Instance.Multiplysum = 0;
+
 
         // 반환된 숫자 카운트 저장
         Dictionary<int, int> rankCount = Hand();
@@ -172,6 +174,7 @@ public class PokerManager : MonoBehaviour
                     // 로얄 스트레이트 플러시: 10, J, Q, K, A
                     saveNum.Add(lastElement.Key);  // 로얄 스트레이트 플러시
                     TextManager.PokerTextUpdate("로얄 스트레이트 플러시");
+                    GameManager.Instance.PokerCalculate(150, 8);
                     Debug.Log("로얄 스트레이트 플러시");
                 }
                 else
@@ -182,6 +185,7 @@ public class PokerManager : MonoBehaviour
                         saveNum.Add(SuitIDdata[i].id);
                     }
                     TextManager.PokerTextUpdate("스트레이트 플러시");
+                    GameManager.Instance.PokerCalculate(100, 8);
                     Debug.Log("스트레이트 플러시");
                 }
                 return;
@@ -195,6 +199,8 @@ public class PokerManager : MonoBehaviour
                     saveNum.Add(SuitIDdata[i].id);
                 }
                 TextManager.PokerTextUpdate("플러시");
+                GameManager.Instance.PokerCalculate(35, 4);
+
                 Debug.Log("플러시");
                 return;
             }
@@ -207,6 +213,8 @@ public class PokerManager : MonoBehaviour
                     saveNum.Add(SuitIDdata[i].id);
                 }
                 TextManager.PokerTextUpdate("스트레이트");
+                GameManager.Instance.PokerCalculate(30, 4);
+
                 Debug.Log("스트레이트");
                 return;
             }
@@ -221,6 +229,8 @@ public class PokerManager : MonoBehaviour
                         saveNum.Add(lastElement.Key);  // 포카드
                     }
                     TextManager.PokerTextUpdate("포 카드");
+                    GameManager.Instance.PokerCalculate(60, 7);
+
                     Debug.Log("포카드");
                 }
                 else if (firstElement.Value == 4)
@@ -230,6 +240,8 @@ public class PokerManager : MonoBehaviour
                         saveNum.Add(firstElement.Key);  // 포카드
                     }
                     TextManager.PokerTextUpdate("포 카드");
+                    GameManager.Instance.PokerCalculate(60, 7);
+
                     Debug.Log("포카드");
                 }
                 else
@@ -237,6 +249,8 @@ public class PokerManager : MonoBehaviour
                     saveNum.Add(firstElement.Key);  // 풀 하우스 (3장, 2장)
                     saveNum.Add(lastElement.Key);
                     TextManager.PokerTextUpdate("풀 하우스");
+                    GameManager.Instance.PokerCalculate(40, 4);
+
                     Debug.Log("풀 하우스");
                 }
                 return;
@@ -255,6 +269,8 @@ public class PokerManager : MonoBehaviour
                 }
             }
             TextManager.PokerTextUpdate("트리플");
+            GameManager.Instance.PokerCalculate(30, 3);
+
             Debug.Log("트리플");
             return;
         }
@@ -270,6 +286,8 @@ public class PokerManager : MonoBehaviour
                 }
             }
             TextManager.PokerTextUpdate("투 페어");
+            GameManager.Instance.PokerCalculate(20, 2);
+
             Debug.Log("투 페어");
             return;
         }
@@ -285,6 +303,8 @@ public class PokerManager : MonoBehaviour
                 }
             }
             TextManager.PokerTextUpdate("원 페어");
+            GameManager.Instance.PokerCalculate(10, 2);
+
             Debug.Log("원 페어");
             return;
         }
@@ -294,6 +314,8 @@ public class PokerManager : MonoBehaviour
         {
             saveNum.Add(lastElement.Key); // 가장 큰 값
             TextManager.PokerTextUpdate("하이 카드");
+            GameManager.Instance.PokerCalculate(5, 1);
+
             Debug.Log("하이 카드: " + lastElement.Key);
             return;
         }
@@ -302,6 +324,7 @@ public class PokerManager : MonoBehaviour
         if(SuitIDdata.Count == 0)
         {
             TextManager.PokerTextUpdate("");
+            TextManager.PokerUpdate(0, 0);
         }
     }
 

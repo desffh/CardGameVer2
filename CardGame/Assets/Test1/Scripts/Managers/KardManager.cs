@@ -100,7 +100,7 @@ public class KardManager : MonoBehaviour
             targetCard?.GetComponent<Order>().SetOriginOrder(i);
         }
     }
-
+    
     // 카드 정렬
     void CardAlignment()
     {
