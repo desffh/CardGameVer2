@@ -19,10 +19,13 @@ public struct SuitIDdata
     }
 }
 
+
 public class PokerManager : MonoBehaviour
 {
     // 최대 5개의 카드를 넣어둘 리스트
     [SerializeField] public List<SuitIDdata> SuitIDdata = new List<SuitIDdata>(5);
+
+    [SerializeField] TextManager TextManager;
 
     private static PokerManager instance;
     public static PokerManager Instance { get { return instance; } }
@@ -168,6 +171,7 @@ public class PokerManager : MonoBehaviour
                 {
                     // 로얄 스트레이트 플러시: 10, J, Q, K, A
                     saveNum.Add(lastElement.Key);  // 로얄 스트레이트 플러시
+                    TextManager.PokerTextUpdate("로얄 스트레이트 플러시");
                     Debug.Log("로얄 스트레이트 플러시");
                 }
                 else
@@ -177,6 +181,7 @@ public class PokerManager : MonoBehaviour
                     {
                         saveNum.Add(SuitIDdata[i].id);
                     }
+                    TextManager.PokerTextUpdate("스트레이트 플러시");
                     Debug.Log("스트레이트 플러시");
                 }
                 return;
@@ -189,6 +194,7 @@ public class PokerManager : MonoBehaviour
                 {
                     saveNum.Add(SuitIDdata[i].id);
                 }
+                TextManager.PokerTextUpdate("플러시");
                 Debug.Log("플러시");
                 return;
             }
@@ -200,6 +206,7 @@ public class PokerManager : MonoBehaviour
                 {
                     saveNum.Add(SuitIDdata[i].id);
                 }
+                TextManager.PokerTextUpdate("스트레이트");
                 Debug.Log("스트레이트");
                 return;
             }
@@ -213,6 +220,7 @@ public class PokerManager : MonoBehaviour
                     {
                         saveNum.Add(lastElement.Key);  // 포카드
                     }
+                    TextManager.PokerTextUpdate("포 카드");
                     Debug.Log("포카드");
                 }
                 else if (firstElement.Value == 4)
@@ -221,12 +229,14 @@ public class PokerManager : MonoBehaviour
                     {
                         saveNum.Add(firstElement.Key);  // 포카드
                     }
+                    TextManager.PokerTextUpdate("포 카드");
                     Debug.Log("포카드");
                 }
                 else
                 {
                     saveNum.Add(firstElement.Key);  // 풀 하우스 (3장, 2장)
                     saveNum.Add(lastElement.Key);
+                    TextManager.PokerTextUpdate("풀 하우스");
                     Debug.Log("풀 하우스");
                 }
                 return;
@@ -244,6 +254,7 @@ public class PokerManager : MonoBehaviour
                     saveNum.Add(item.Key);
                 }
             }
+            TextManager.PokerTextUpdate("트리플");
             Debug.Log("트리플");
             return;
         }
@@ -258,6 +269,7 @@ public class PokerManager : MonoBehaviour
                     saveNum.Add(item.Key);
                 }
             }
+            TextManager.PokerTextUpdate("투 페어");
             Debug.Log("투 페어");
             return;
         }
@@ -272,6 +284,7 @@ public class PokerManager : MonoBehaviour
                     saveNum.Add(item.Key);
                 }
             }
+            TextManager.PokerTextUpdate("원 페어");
             Debug.Log("원 페어");
             return;
         }
@@ -280,8 +293,15 @@ public class PokerManager : MonoBehaviour
         if (SuitIDdata.Count != 0)
         {
             saveNum.Add(lastElement.Key); // 가장 큰 값
+            TextManager.PokerTextUpdate("하이 카드");
             Debug.Log("하이 카드: " + lastElement.Key);
             return;
+        }
+
+        // 리스트가 비어있다면 텍스트도 빈 값
+        if(SuitIDdata.Count == 0)
+        {
+            TextManager.PokerTextUpdate("");
         }
     }
 

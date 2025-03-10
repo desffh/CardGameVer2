@@ -114,7 +114,7 @@ public class Card : MonoBehaviour
         {
             PokerManager.Instance.Hand();
             PokerManager.Instance.getHandType();
-            Debug.Log(PokerManager.Instance.saveNum.Count); // 카운트가 0 미만이면 출력 x
+            // Debug.Log(PokerManager.Instance.saveNum.Count); // 카운트가 0 미만이면 출력 x
 
         }
     }

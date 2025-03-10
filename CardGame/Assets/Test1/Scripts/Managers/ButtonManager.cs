@@ -6,10 +6,25 @@ using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour
 {
+    public static ButtonManager instance { get; private set; }
+
     [SerializeField] Button Handbutton;
     [SerializeField] Button Treshbutton;
 
     [SerializeField] HandCardPoints HandCardPoints;
+
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void Start()
     {
         Handbutton.interactable = false;
@@ -40,12 +55,24 @@ public class ButtonManager : MonoBehaviour
             // 위치를 HandCardPoints로 이동
             PokerManager.Instance.SuitIDdata[i].Cardclone.transform.position 
                 = HandCardPoints.HandCardpos[i].transform.position;
+            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.rotation = Quaternion.identity;
+           
         }
+        // 더하기 계산
+        GameManager.Instance.CalSetting();
+
     }
 
     // 버리기를 클릭했을 때
-    public void OnTreshButtonClick()
-    { 
-    
+    public void OnDeleteButtonClick()
+    {
+        for (int i = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
+        {
+            // 저장된 프리팹의 위치값을 변경하기 위해 컴포넌트 가져오기
+            PokerManager.Instance.SuitIDdata[i].Cardclone.GetComponent<Transform>();
+            // 위치를 HandCardPoints로 이동
+            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.position
+                = HandCardPoints.DeleteCardpos.transform.position;
+        }
     }
 }
