@@ -56,7 +56,7 @@ public class ButtonManager : MonoBehaviour
             
             // 위치를 HandCardPoints로 이동
             PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
-                DOMove(HandCardPoints.HandCardpos[i].transform.position, 0.7f);
+                DOMove(HandCardPoints.HandCardpos[i].transform.position, 0.5f);
            // 회전 0
             PokerManager.Instance.SuitIDdata[i].Cardclone.transform.rotation = Quaternion.identity;
         
@@ -74,10 +74,18 @@ public class ButtonManager : MonoBehaviour
             PokerManager.Instance.SuitIDdata[i].Cardclone.GetComponent<Transform>();
             // 위치를 HandCardPoints로 이동
             PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
-                DOMove(HandCardPoints.DeleteCardpos.transform.position, 1);
+                DOMove(HandCardPoints.DeleteCardpos.transform.position, 0.5f);
             // 회전 0
             PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
                 DORotate(new Vector3(58, 122, 71), 3);
         }
+
+        GameManager.Instance.StartDeleteCard();
+    }
+
+    public void ButtonActive()
+    {
+        Handbutton.interactable = false;
+        Treshbutton.interactable = false;
     }
 }

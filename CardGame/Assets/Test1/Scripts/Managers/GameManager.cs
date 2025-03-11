@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] TextManager textManager;
 
+
     private void Start()
     {
         waitForSeconds = new WaitForSeconds(2.0f);
@@ -87,6 +88,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void UIupdate()
+    {
+        textManager.PokerTextUpdate();
+        textManager.PlusTextUpdate();
+        textManager.MultipleTextUpdate();
+    }
+
     public void DelaySetActive()
     {
         for (int i = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
@@ -103,6 +111,9 @@ public class GameManager : MonoBehaviour
         // 계산 다 하고 리스트 초기화
         PokerManager.Instance.SuitIDdata.Clear();
         PokerManager.Instance.saveNum.Clear();
+        UIupdate();
+
+        // 다시 콜라이더 활성화
         KardManager.Inst.card.StartCollider();
         yield break;
     }
@@ -141,6 +152,8 @@ public class GameManager : MonoBehaviour
         if (PokerManager.Instance.SuitIDdata.Count > 0)
         {
             Plussum += plus;
+            
+
             Multiplysum += multiple;
         }
         textManager.PokerUpdate(Plussum, Multiplysum);
@@ -163,5 +176,31 @@ public class GameManager : MonoBehaviour
     {
         TotalScore += Plussum * Multiplysum;
         textManager.TotalScoreUpdate(TotalScore);
+    }
+
+    IEnumerator deleteCard()
+    {
+        yield return waitForSeconds;
+        DelaySetActive();
+
+        // 다시 콜라이더 활성화
+        KardManager.Inst.card.StartCollider();
+        
+        // 리스트 초기화
+        PokerManager.Instance.SuitIDdata.Clear();
+        PokerManager.Instance.saveNum.Clear();
+        UIupdate();
+        
+        yield break;
+    }
+
+    public void StartDeleteCard()
+    {
+        // 버리는 동안 카드의 콜라이더 비활성화
+        KardManager.Inst.card.QuitCollider();
+
+        // 카드 비활성화 & 콜라이더 활성화 
+        StartCoroutine(deleteCard());
+
     }
 }

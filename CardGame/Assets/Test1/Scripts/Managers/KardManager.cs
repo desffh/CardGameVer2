@@ -179,8 +179,8 @@ public class KardManager : MonoBehaviour
     }
 
     public void ColliderQuit()
-    {
-        Debug.Log("콜라이더 비활성화");
+    {   
         card.QuitCollider();
+        
     }
 }

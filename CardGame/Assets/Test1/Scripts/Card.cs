@@ -100,11 +100,7 @@ public class Card : MonoBehaviour
     // 마우스로 클릭하면 리스트에 카드 넣기 (최대5개)
     // 콜라이더가 부착된 Card오브젝트를 클릭 할 수 있다
     public void OnMouseDown()
-    {
-        //cardPrefabs.DORotate(new Vector3(0, 0, 10f), 0.2f);
-        // 카드를 클릭하면 애니메이션
-        cardPrefabs.DOScale(new Vector3(0.65f, 0.65f, 0.65f), 0.1f).
-            OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.2f); });
+    {        
 
 
         SuitIDdata suitidData = new SuitIDdata(itemdata.suit, itemdata.id, this.gameObject);
@@ -112,16 +108,33 @@ public class Card : MonoBehaviour
         if (checkCard && PokerManager.Instance.SuitIDdata.Count <= 5)
         {
             PokerManager.Instance.RemoveSuitIDdata(suitidData);
+            
+            // 기존 위치로 이동
+            cardPrefabs.DOMove(new Vector3(cardPrefabs.transform.position.x,
+               cardPrefabs.transform.position.y -0.5f,
+               cardPrefabs.transform.position.z), 0.5f);
+
             checkCard = false;
         }
         else if(PokerManager.Instance.SuitIDdata.Count < 5)
         {
             PokerManager.Instance.SaveSuitIDdata(suitidData);
+            
+            // 클릭 애니메이션
+            cardPrefabs.DOMove(new Vector3(cardPrefabs.transform.position.x,
+               cardPrefabs.transform.position.y + 0.5f,
+               cardPrefabs.transform.position.z), 0.5f);
+            
             checkCard = true;
         }
         else
         {
             Debug.Log("더이상 카드를 누를 수 없음");
+            
+            //cardPrefabs.DORotate(new Vector3(0, 0, 10f), 0.2f);
+            // 카드를 클릭하면 애니메이션
+            cardPrefabs.DOScale(new Vector3(0.65f, 0.65f, 0.65f), 0.1f).
+            OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.2f); });
         }
 
         
@@ -134,12 +147,23 @@ public class Card : MonoBehaviour
         }
     }
 
+    // 콜라이더 비활성화
     public void QuitCollider()
     {
-        Collider2D.enabled = false;
+        Debug.Log("카드들 콜라이더 비활성화");
+        for (int i = 0; i < 8; i++)
+        {
+            KardManager.Inst.myCards[i].Collider2D.enabled = false;
+        }
     }
+
+    // 콜라이더 활성화
     public void StartCollider()
     {
-        Collider2D.enabled = true;
+        Debug.Log("카드들 콜라이더 활성화");
+        for(int i = 0; i < 8; i++)
+        {
+            KardManager.Inst.myCards[i].Collider2D.enabled = true;  
+        }
     }
 }

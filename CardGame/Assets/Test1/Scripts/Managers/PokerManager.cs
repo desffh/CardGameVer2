@@ -70,7 +70,7 @@ public class PokerManager : MonoBehaviour
         // LinQ메서드를 사용한 오름차순정렬 (value 값 (숫자 갯수) 기준으로)
         SuitIDdata = SuitIDdata.OrderBy(x => x.id).ToList();
 
-        Debug.Log(saveNum.Count); // 카운트가 0 미만이면 출력 x
+        // Debug.Log(saveNum.Count); // 카운트가 0 미만이면 출력 x
 
 
         // for (int i = 0; i < SuitIDdata.Count; i++)
