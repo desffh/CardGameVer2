@@ -23,8 +23,8 @@ public class Card : MonoBehaviour
     [SerializeField] SpriteRenderer spriteCards;
     [SerializeField] SpriteRenderer spriteCards2;
 
-    [SerializeField] Collider2D Collider2D;
-
+    [SerializeField] BoxCollider2D Collider2D;
+    
     public ItemData itemdata;
 
     public string spriteSheetName;
@@ -40,9 +40,14 @@ public class Card : MonoBehaviour
 
     private void Awake()
     {
-        Collider2D = GetComponent<Collider2D>();
+        Collider2D = GetComponent<BoxCollider2D>();
 
         cardPrefabs = GetComponent<Transform>();
+    }
+
+    private void Start()
+    {
+        Collider2D.enabled = true;
     }
 
     public void Setup(ItemData item)
@@ -93,6 +98,7 @@ public class Card : MonoBehaviour
     [SerializeField] private bool checkCard = false;
 
     // 마우스로 클릭하면 리스트에 카드 넣기 (최대5개)
+    // 콜라이더가 부착된 Card오브젝트를 클릭 할 수 있다
     public void OnMouseDown()
     {
         //cardPrefabs.DORotate(new Vector3(0, 0, 10f), 0.2f);
@@ -128,7 +134,12 @@ public class Card : MonoBehaviour
         }
     }
 
-    
-
-
+    public void QuitCollider()
+    {
+        Collider2D.enabled = false;
+    }
+    public void StartCollider()
+    {
+        Collider2D.enabled = true;
+    }
 }

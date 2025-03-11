@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class KardManager : MonoBehaviour
 {
@@ -29,10 +30,12 @@ public class KardManager : MonoBehaviour
 
     [SerializeField] Transform cardSpawnPoint; // 카드 생성위치 가져오기 
 
+    [SerializeField] public Card card;
 
     // 카드 정렬 시작, 끝 위치
     [SerializeField] Transform myCardLeft;
     [SerializeField] Transform myCardRight;
+
 
 
     // 리스트에 아이템을 넣어줄 함수
@@ -175,4 +178,9 @@ public class KardManager : MonoBehaviour
         AddCardSpawn();
     }
 
+    public void ColliderQuit()
+    {
+        Debug.Log("콜라이더 비활성화");
+        card.QuitCollider();
+    }
 }

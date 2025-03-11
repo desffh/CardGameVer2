@@ -63,7 +63,6 @@ public class ButtonManager : MonoBehaviour
         }
         // 더하기 계산
         GameManager.Instance.Calculation();
-        
     }
 
     // 버리기를 클릭했을 때

@@ -202,6 +202,7 @@ MonoBehaviour:
   itemBuffer: []
   myCards: []
   cardSpawnPoint: {fileID: 773965599}
+  card: {fileID: -6056702233427692128, guid: f8573787955db2e4d859aea5ce3199d5, type: 3}
   myCardLeft: {fileID: 1195458377}
   myCardRight: {fileID: 888227813}
   cardPrefabs: {fileID: 100000, guid: f8573787955db2e4d859aea5ce3199d5, type: 3}
@@ -784,7 +785,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f55ce062c522a94eaae4d8d3140531a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SuitIDdata: []
   TextManager: {fileID: 735893446}
   saveNum: 
 --- !u!1 &409935965
@@ -1436,6 +1436,18 @@ MonoBehaviour:
       - m_Target: {fileID: 658130914}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: CalSetting
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 95414050}
+        m_TargetAssemblyTypeName: KardManager, Assembly-CSharp
+        m_MethodName: ColliderQuit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

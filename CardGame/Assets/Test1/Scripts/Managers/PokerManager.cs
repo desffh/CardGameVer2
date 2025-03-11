@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[Serializable]
+
 public struct SuitIDdata
 {
     public string suit;
@@ -31,7 +31,7 @@ public class PokerManager : MonoBehaviour
     public static PokerManager Instance { get { return instance; } }
 
     // 저장해둘 숫자
-    [SerializeField] public List<int> saveNum;
+    public List<int> saveNum;
 
     // 숫자가 몇번 등장하는지 저장할 딕셔너리 (숫자, 몇번 등장하는지)
     [SerializeField] private Dictionary<int, int> dictionary;
