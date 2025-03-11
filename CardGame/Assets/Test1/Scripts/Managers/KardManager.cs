@@ -36,7 +36,8 @@ public class KardManager : MonoBehaviour
     [SerializeField] Transform myCardLeft;
     [SerializeField] Transform myCardRight;
 
-
+    // 부모 게임 오브젝트 할당
+    [SerializeField] private GameObject ParentCardPrefab;
 
     // 리스트에 아이템을 넣어줄 함수
     void SetupItemBuffer()
@@ -81,35 +82,42 @@ public class KardManager : MonoBehaviour
 
     void AddCard()
     {
-        var cardObject = Instantiate(cardPrefabs, cardSpawnPoint.position, Utils.QI); // 게임 오브젝트 타입
-        var card = cardObject.GetComponent<Card>(); // 생성된 카드의 스크립트 가져오기 (Card)
-        card.Setup(PopItem());
+        if(myCards.Count < 8)
+        {
+            var cardObject = Instantiate(cardPrefabs, cardSpawnPoint.position, Utils.QI); // 게임 오브젝트 타입
 
-        myCards.Add(card);
+            // 부모의 아래에 생성 (하이라키창 계층구조)
+            cardObject.transform.SetParent(ParentCardPrefab.transform);
+        
+            var card = cardObject.GetComponent<Card>(); // 생성된 카드의 스크립트 가져오기 (Card)
+            card.Setup(PopItem());
 
+            myCards.Add(card);
+        }
         SetOriginOrder();
         CardAlignment();
     }
 
+
     // 리스트 전체 정렬하기 (먼저 추가한 카드가 제일 뒷쪽에 보임)
-    void SetOriginOrder()
+    public void SetOriginOrder()
     {
         int count = myCards.Count;
 
         for (int i = 0; i < count; i++)
         {
             var targetCard = myCards[i];
+
             // ? -> targerCard가 null이 아니면 컴포넌트 가져오기
             targetCard?.GetComponent<Order>().SetOriginOrder(i);
         }
     }
     
     // 카드 정렬
-    void CardAlignment()
+    public void CardAlignment()
     {
         List<PRS> originCardPRSs = new List<PRS>();
 
-        // 내 카드라면
         originCardPRSs = RoundAlignment(myCardLeft, myCardRight, myCards.Count, 0.5f, Vector3.one * 0.7f);
 
         var targetCards = myCards;
@@ -165,7 +173,7 @@ public class KardManager : MonoBehaviour
 
     public void AddCardSpawn()
     {
-        for (int i = 0; i < 8; i++) // 8장의 카드를 생성
+        for (int i = myCards.Count; i < 8; i++) // 8장까지의 카드를 생성
         {
             AddCard(); // 카드 생성 함수 호출
         }
@@ -181,6 +189,6 @@ public class KardManager : MonoBehaviour
     public void ColliderQuit()
     {   
         card.QuitCollider();
-        
+        PokerManager.Instance.QuitCollider2();
     }
 }

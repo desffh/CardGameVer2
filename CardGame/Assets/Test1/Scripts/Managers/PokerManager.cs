@@ -38,6 +38,8 @@ public class PokerManager : MonoBehaviour
 
     private void Awake()
     {
+
+
         saveNum = new List<int>();
 
         dictionary = new Dictionary<int, int>();
@@ -84,8 +86,9 @@ public class PokerManager : MonoBehaviour
     {
         // 리스트에서 같은 suit, id 값을 가진 객체 찾기
         SuitIDdata existingData = SuitIDdata.Find(x => x.suit == newSuitIDdata.suit && x.id == newSuitIDdata.id);
-        SuitIDdata.Remove(existingData);
 
+        // 리스트에서 제거 
+        SuitIDdata.Remove(existingData);
     }
 
 
@@ -321,12 +324,19 @@ public class PokerManager : MonoBehaviour
         }
 
         // 리스트가 비어있다면 텍스트도 빈 값
-        if(SuitIDdata.Count == 0)
+        if (SuitIDdata.Count == 0)
         {
             TextManager.PokerTextUpdate("");
             TextManager.PokerUpdate(0, 0);
         }
     }
 
+    public void QuitCollider2()
+    {
+        for (int i = 0; i < SuitIDdata.Count; i++)
+        {
+            SuitIDdata[i].Cardclone.GetComponent<BoxCollider2D>().enabled = false;
+        }
 
+    }
 }

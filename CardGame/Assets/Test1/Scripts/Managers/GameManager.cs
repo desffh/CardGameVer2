@@ -79,10 +79,10 @@ public class GameManager : MonoBehaviour
 
             // 위치를 HandCardPoints로 이동
             PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
-                DOMove(deleteCardPoint.DeleteCardpos.transform.position, 1);
+                DOMove(deleteCardPoint.DeleteCardpos.transform.position, 1).SetDelay(i * 0.2f);
             // 회전 0
             PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
-                DORotate(new Vector3(58, 122, 71), 3);
+                DORotate(new Vector3(-45,-60,-25),0.5f).SetDelay(i * 0.2f);
 
             StartCoroutine(delayActive());
         }
@@ -103,6 +103,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    // 계산이 끝나는 곳 & 다시 카드가 배치되는 곳
     IEnumerator delayActive()
     {
         yield return waitForSeconds;
@@ -115,6 +117,10 @@ public class GameManager : MonoBehaviour
 
         // 다시 콜라이더 활성화
         KardManager.Inst.card.StartCollider();
+        ButtonManager.instance.ButtonInactive();
+
+        KardManager.Inst.AddCardSpawn();
+
         yield break;
     }
 
@@ -190,7 +196,10 @@ public class GameManager : MonoBehaviour
         PokerManager.Instance.SuitIDdata.Clear();
         PokerManager.Instance.saveNum.Clear();
         UIupdate();
-        
+
+        KardManager.Inst.AddCardSpawn();
+
+
         yield break;
     }
 
@@ -201,6 +210,5 @@ public class GameManager : MonoBehaviour
 
         // 카드 비활성화 & 콜라이더 활성화 
         StartCoroutine(deleteCard());
-
     }
 }

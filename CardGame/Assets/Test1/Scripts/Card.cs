@@ -38,6 +38,10 @@ public class Card : MonoBehaviour
     // 모든 텍스쳐를 다 넣어둘 배열
     Sprite[] sprites;
 
+
+    
+
+
     private void Awake()
     {
         Collider2D = GetComponent<BoxCollider2D>();
@@ -83,9 +87,9 @@ public class Card : MonoBehaviour
     {
         if (useDotween)
         {
-            transform.DOMove(prs.pos, dotweenTime);
-            transform.DORotateQuaternion(prs.rot, dotweenTime);
-            transform.DOScale(prs.scale, dotweenTime);
+            transform.DOMove(prs.pos, dotweenTime).SetDelay(0.2f);
+            transform.DORotateQuaternion(prs.rot, dotweenTime).SetDelay(0.2f);
+            transform.DOScale(prs.scale, dotweenTime).SetDelay(0.2f);
         }
         else
         {
@@ -151,7 +155,8 @@ public class Card : MonoBehaviour
     public void QuitCollider()
     {
         Debug.Log("카드들 콜라이더 비활성화");
-        for (int i = 0; i < 8; i++)
+
+        for (int i = 0; i < KardManager.Inst.myCards.Count; i++)
         {
             KardManager.Inst.myCards[i].Collider2D.enabled = false;
         }
@@ -161,7 +166,7 @@ public class Card : MonoBehaviour
     public void StartCollider()
     {
         Debug.Log("카드들 콜라이더 활성화");
-        for(int i = 0; i < 8; i++)
+        for(int i = 0; i < KardManager.Inst.myCards.Count; i++)
         {
             KardManager.Inst.myCards[i].Collider2D.enabled = true;  
         }
