@@ -14,6 +14,8 @@ public class ButtonManager : MonoBehaviour
 
     [SerializeField] HandCardPoints HandCardPoints;
 
+    [SerializeField] GameObject PopUpCanvas;
+
     // 버튼 활성화 상태 여부
     private bool isButtonActive = true;
 
@@ -34,6 +36,8 @@ public class ButtonManager : MonoBehaviour
     {
         Handbutton.interactable = false;
         Treshbutton.interactable = false;
+
+        PopUpCanvas.SetActive(false);
     }
 
     private void Update()
@@ -142,4 +146,14 @@ public class ButtonManager : MonoBehaviour
         isButtonActive = true;
     }
 
+
+    public void RunOnClick()
+    {
+        PopUpCanvas.SetActive(true);
+    }
+
+    public void RunDeleteClick()
+    {
+        PopUpCanvas.SetActive(false);
+    }
 }

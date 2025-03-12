@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        waitForSeconds = new WaitForSeconds(2.0f);
+        waitForSeconds = new WaitForSeconds(1.0f);
 
         Plussum = 0;
         Multiplysum = 0;
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
 
         // 횟수 초기화
         Hand = 4;
-        Delete = 10;
+        Delete = 4;
     }
 
     public void StageEnd()
@@ -280,8 +280,8 @@ public class GameManager : MonoBehaviour
 
     IEnumerator DelayedTotalScoreCal()
     {
-        yield return waitForSeconds;  // 1초 대기
-        TotalScoreCal();  // 1초 뒤에 TotalScoreCal 실행
+        yield return waitForSeconds;  // 대기
+        TotalScoreCal();  // TotalScoreCal 실행
         StartCoroutine(DelayedMove());
     }
 
