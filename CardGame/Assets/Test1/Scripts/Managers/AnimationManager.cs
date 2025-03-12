@@ -16,7 +16,7 @@ public class AnimationManager : MonoBehaviour
         float originalFontSize = scoreText.fontSize;
 
         // 글씨 크기를 키우는 애니메이션
-        DOTween.To(() => scoreText.fontSize, x => scoreText.fontSize = x, originalFontSize * 1.1f, 0.1f)
+        DOTween.To(() => scoreText.fontSize, x => scoreText.fontSize = x, originalFontSize * 1.3f, 0.1f)
         .OnComplete(() =>
         {
             // 글씨 크기를 다시 원래 크기로 줄이는 애니메이션

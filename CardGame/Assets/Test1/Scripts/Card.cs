@@ -34,7 +34,6 @@ public class Card : MonoBehaviour
 
     [SerializeField] SuitIDdata SuitIDdata;
 
-
     // 모든 텍스쳐를 다 넣어둘 배열
     Sprite[] sprites;
 
@@ -104,8 +103,7 @@ public class Card : MonoBehaviour
     // 마우스로 클릭하면 리스트에 카드 넣기 (최대5개)
     // 콜라이더가 부착된 Card오브젝트를 클릭 할 수 있다
     public void OnMouseDown()
-    {        
-
+    { 
 
         SuitIDdata suitidData = new SuitIDdata(itemdata.suit, itemdata.id, this.gameObject);
 

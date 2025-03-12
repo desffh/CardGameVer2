@@ -20,15 +20,34 @@ public class TextManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI HandText;
     [SerializeField] TextMeshProUGUI DeleteText;
 
+    [SerializeField] TextMeshProUGUI TotalCards;
+    [SerializeField] TextMeshProUGUI HandCards;
+
 
     // 카드 위에 뜰 개별 텍스트 -> 하나의 프리팹으로 숫자만 바꿔서 쓰자
     //[SerializeField] GameObject Indexscore;
 
     
+    private void Awake()
+    {
+
+    }
+
     private void Start()
     {
-        
+        HandText.text = GameManager.Instance.Hand.ToString();
+        DeleteText.text = GameManager.Instance.Delete.ToString();
+
+        // 일단 한번 호출해서 UI 싹 갱신
+        BufferUpdate();
+        HandCardUpdate();
     }
+
+    private void Update()
+    {
+        HandCardUpdate();
+    }
+
 
     // 리스트에 아무 값도 들어있지 않으면 빈 값 ""
     public void PokerTextUpdate(string pokertext = "")
@@ -63,9 +82,33 @@ public class TextManager : MonoBehaviour
         animationmanager.CaltransformAnime(TotalScoreText);
     }
 
-    [SerializeField] private GameObject parentTransform;
+    public void HandCountUpdate(int handcount)
+    {
+        HandText.text = handcount.ToString();
+        animationmanager.CaltransformAnime(HandText);
+    }
 
-    /*public void IndexScore(int score)
+    public void DeleteCountUpdate(int deletecount)
+    {
+        DeleteText.text = deletecount.ToString();
+        animationmanager.CaltransformAnime(DeleteText);
+    }
+
+    public void BufferUpdate()
+    {
+        TotalCards.text = KardManager.Inst.itemBuffer.Count.ToString()
+            + " / "+ KardManager.Inst.itemBuffer.Capacity.ToString();
+    }
+
+    public void HandCardUpdate()
+    {
+        HandCards.text = (KardManager.Inst.myCards.Capacity - PokerManager.Instance.SuitIDdata.Count).ToString() + " / "
+            + KardManager.Inst.myCards.Capacity.ToString();
+    }
+
+    /*[SerializeField] private GameObject parentTransform;
+
+    public void IndexScore(int score)
     {
         // 프리팹 텍스트에 문자열 할당
         TextMeshProUGUI textComponent = Indexscore.GetComponent<TextMeshProUGUI>();

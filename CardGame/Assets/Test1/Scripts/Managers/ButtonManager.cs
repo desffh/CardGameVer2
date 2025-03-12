@@ -17,6 +17,7 @@ public class ButtonManager : MonoBehaviour
     // 버튼 활성화 상태 여부
     private bool isButtonActive = true;
 
+
     private void Awake()
     {
         if(instance == null)
@@ -37,23 +38,33 @@ public class ButtonManager : MonoBehaviour
 
     private void Update()
     {
-        // 선택된 카드가 > 0 이거나, bool 변수가 true라면 버튼 활성화
-        if (PokerManager.Instance.SuitIDdata.Count > 0  && isButtonActive == true)
-        {
+       if(isButtonActive == true && GameManager.Instance.Hand > 0 && PokerManager.Instance.SuitIDdata.Count > 0) 
+       {
             Handbutton.interactable = true;
+       }
+       else
+       {
+            Handbutton.interactable = false;
+       }
+       if(isButtonActive == true && GameManager.Instance.Delete > 0 && PokerManager.Instance.SuitIDdata.Count > 0)
+        {
             Treshbutton.interactable = true;
         }
-        else
+       else
         {
-            Handbutton.interactable = false;
             Treshbutton.interactable = false;
+
         }
     }
 
-    // 핸드를 클릭했을 때
+    // 핸드버튼을 클릭했을 때
     public void OnHandButtonClick()
     {
-        for(int i  = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
+        GameManager.Instance.DeCountHand();
+
+        
+
+        for (int i  = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
         {
             // 저장된 카드의 스크립트 가져오기
             Card selectedCard =  PokerManager.Instance.SuitIDdata[i].Cardclone.GetComponent<Card>();
@@ -81,9 +92,13 @@ public class ButtonManager : MonoBehaviour
         GameManager.Instance.Calculation();
     }
 
-    // 버리기를 클릭했을 때
+    // 버리기 버튼을 클릭했을 때
     public void OnDeleteButtonClick()
     {
+        GameManager.Instance.DeCountDelete();
+
+        isButtonActive = false;
+
         for (int i = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
         {
             // 저장된 카드의 스크립트 가져오기
@@ -126,4 +141,5 @@ public class ButtonManager : MonoBehaviour
     {
         isButtonActive = true;
     }
+
 }

@@ -24,7 +24,7 @@ public class KardManager : MonoBehaviour
     [SerializeField] ItemDataReader ItemDataReader;
 
     // ItemData 타입을 담을 List 선언 (리스트는 동적배열 - 아직 크기 할당 안된 상태)
-    [SerializeField] List<ItemData> itemBuffer;
+    [SerializeField] public List<ItemData> itemBuffer;
 
     [SerializeField] public List<Card> myCards; // Card 타입을 담을 리스트 (내 카드)
 

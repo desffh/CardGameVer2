@@ -20,8 +20,8 @@ public class GameManager : MonoBehaviour
 
     // 핸드 횟수 & 버리기 횟수
     
-    [SerializeField] int Hand;
-    [SerializeField] int Delete;
+    [SerializeField] public int Hand;
+    [SerializeField] public int Delete;
 
 
     public static GameManager Instance { get; private set; }
@@ -59,9 +59,33 @@ public class GameManager : MonoBehaviour
 
         Num = new Queue<int>();
 
+        // 횟수 초기화
         Hand = 4;
-        Delete = 4;
+        Delete = 10;
     }
+
+    public void StageEnd()
+    {
+        Debug.Log("스테이지 종료");
+        Application.Quit();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // 에디터에서 플레이 모드를 종료
+#endif
+
+    }
+
+    public void DeCountHand()
+    {
+        --Hand;
+        textManager.HandCountUpdate(Hand);
+    }
+    public void DeCountDelete()
+    {
+        --Delete;
+        textManager.DeleteCountUpdate(Delete);
+    }
+
 
     // 이벤트 : 1. 큐에 값 다 넣기 2. 계산 후 텍스트 누적 3. 카드 날라간 뒤 비활성화
     public void Calculation()
@@ -107,6 +131,7 @@ public class GameManager : MonoBehaviour
         textManager.PokerTextUpdate();
         textManager.PlusTextUpdate();
         textManager.MultipleTextUpdate();
+        textManager.BufferUpdate();
     }
 
     public void DelaySetActive()
@@ -135,6 +160,11 @@ public class GameManager : MonoBehaviour
 
         CheckReset();
 
+        if(Hand <= 0)
+        {
+            StageEnd();
+
+        }
         KardManager.Inst.AddCardSpawn();
 
         yield break;
@@ -266,17 +296,16 @@ public class GameManager : MonoBehaviour
         yield return waitForSeconds;
         DelaySetActive();
 
-        // 다시 콜라이더 활성화
-        KardManager.Inst.card.StartCollider();
-        
         // 리스트 초기화
         PokerManager.Instance.SuitIDdata.Clear();
         PokerManager.Instance.saveNum.Clear();
-        UIupdate();
 
         KardManager.Inst.AddCardSpawn();
+        UIupdate();
 
-
+        // 다시 콜라이더 활성화
+        KardManager.Inst.card.StartCollider();
+        ButtonManager.instance.ButtonInactive();
         yield break;
     }
 
