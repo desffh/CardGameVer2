@@ -23,4 +23,23 @@ public class AnimationManager : MonoBehaviour
             DOTween.To(() => scoreText.fontSize, x => scoreText.fontSize = x, originalFontSize, 0.1f);
         });
     }
+
+    public void PlayCardAnime(GameObject cardPrefabs)
+    {
+        cardPrefabs.transform.DORotate(new Vector3(cardPrefabs.transform.position.x,
+            cardPrefabs.transform.position.y, cardPrefabs.transform.position.z + 3f), 0.1f).
+            OnComplete(() =>
+            {
+                cardPrefabs.transform.DORotate(new Vector3(cardPrefabs.transform.position.x,
+            cardPrefabs.transform.position.y, cardPrefabs.transform.position.z), 0.1f);
+            });
+
+        cardPrefabs.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.5f).
+            OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.3f); });
+    }
+
+    //public void IndexScoreAnime(GameObject text, float duration)
+    //{
+    //    // duration : 대사가 출력되는 데 걸리는 시간
+    //}
 }

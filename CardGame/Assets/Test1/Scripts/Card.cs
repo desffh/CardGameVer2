@@ -116,7 +116,7 @@ public class Card : MonoBehaviour
             // 기존 위치로 이동
             cardPrefabs.DOMove(new Vector3(cardPrefabs.transform.position.x,
                cardPrefabs.transform.position.y -0.5f,
-               cardPrefabs.transform.position.z), 0.5f);
+               cardPrefabs.transform.position.z), 0.2f);
 
             checkCard = false;
         }
@@ -127,7 +127,7 @@ public class Card : MonoBehaviour
             // 클릭 애니메이션
             cardPrefabs.DOMove(new Vector3(cardPrefabs.transform.position.x,
                cardPrefabs.transform.position.y + 0.5f,
-               cardPrefabs.transform.position.z), 0.5f);
+               cardPrefabs.transform.position.z), 0.2f);
             
             checkCard = true;
         }

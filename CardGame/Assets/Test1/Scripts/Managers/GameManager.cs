@@ -1,6 +1,8 @@
 using DG.Tweening;
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -13,6 +15,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] HandCardPoints deleteCardPoint;
 
     WaitForSeconds waitForSeconds;
+
+
+
+    // 핸드 횟수 & 버리기 횟수
+    
+    [SerializeField] int Hand;
+    [SerializeField] int Delete;
+
+
     public static GameManager Instance { get; private set; }
 
     private void Awake()
@@ -36,7 +47,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public int TotalScore;
 
     [SerializeField] TextManager textManager;
-
+    [SerializeField] AnimationManager animationManager;
 
     private void Start()
     {
@@ -47,6 +58,9 @@ public class GameManager : MonoBehaviour
         TotalScore = 0;
 
         Num = new Queue<int>();
+
+        Hand = 4;
+        Delete = 4;
     }
 
     // 이벤트 : 1. 큐에 값 다 넣기 2. 계산 후 텍스트 누적 3. 카드 날라간 뒤 비활성화
@@ -119,6 +133,8 @@ public class GameManager : MonoBehaviour
         KardManager.Inst.card.StartCollider();
         ButtonManager.instance.ButtonInactive();
 
+        CheckReset();
+
         KardManager.Inst.AddCardSpawn();
 
         yield break;
@@ -145,12 +161,73 @@ public class GameManager : MonoBehaviour
     {
         if (Num.Count > 0)
         {
+            // 큐에서 빼면서 체크
             int saveNumber = Num.Dequeue();
             Plussum += saveNumber;
-        }
 
+            // 애니메이션 호출
+            animationManager.PlayCardAnime(SaveNumber(saveNumber));
+
+            // 타이핑 모션 (카드 위에 생성) - 함수를 호출
+            //textManager.IndexScore(saveNumber);
+        }
         textManager.PlusTextUpdate(Plussum);
     }
+
+    // 애니메이션을 호출하기 위해 사용
+    private GameObject game;
+
+    private bool[] savenumberCheck = new bool[5];
+    public GameObject SaveNumber(int saveNumber)
+    {
+        for (int i = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
+        {
+            if (savenumberCheck[i] == false && PokerManager.Instance.SuitIDdata[i].id == saveNumber)
+            {
+                game = PokerManager.Instance.SuitIDdata[i].Cardclone;
+
+                savenumberCheck[i] = true;
+                // 리스트에서 제거해버리면 deleteZone으로 이동할 수 없음
+                //PokerManager.Instance.SuitIDdata.RemoveAt(i);
+                break;
+            }
+        }
+        return game;
+    }
+
+    
+    /*
+    // 카드 개별 점수 텍스트 애니메이션을 호출하기 위해 사용
+    Transform transforms;
+
+    private bool[] saveIndexCheck = new bool[5];
+    public Transform SaveIndex(int saveNumber)
+    {
+        for (int i = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
+        {
+            if (savenumberCheck[i] == false && PokerManager.Instance.SuitIDdata[i].id == saveNumber)
+            {
+                transforms = PokerManager.Instance.SuitIDdata[i].Cardclone.GetComponent<Transform>();
+
+                saveIndexCheck[i] = true;
+
+                break;
+            }
+        }
+        return transforms;
+    }
+    */
+
+
+    // 애니메이션 판단여부 bool배열 초기화
+    private void CheckReset()
+    {
+        for(int i = 0; i < 5; i++)
+        {
+            savenumberCheck[i] = false;
+        }
+    }
+
 
     // 족보 룰 점수
     public void PokerCalculate(int plus, int multiple)
