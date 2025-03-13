@@ -37,6 +37,7 @@ public class ItemDataReader : DataReaderBase
         string suit = string.Empty;
         string front = string.Empty;
 
+
         for (int i = 0; i < list.Count; i++)
         {
             switch (list[i].columnId)

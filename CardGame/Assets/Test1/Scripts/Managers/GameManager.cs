@@ -186,6 +186,7 @@ public class GameManager : MonoBehaviour
             Calculate();
         }
     }
+    
 
     public void Calculate()
     {
@@ -203,7 +204,7 @@ public class GameManager : MonoBehaviour
         }
         textManager.PlusTextUpdate(Plussum);
     }
-
+    
     // 애니메이션을 호출하기 위해 사용
     private GameObject game;
 
@@ -272,17 +273,17 @@ public class GameManager : MonoBehaviour
         textManager.PokerUpdate(Plussum, Multiplysum);
     }
 
-    IEnumerator DelayedMove()
-    {
-        yield return waitForSeconds;
-        DeleteMove();
-    }
 
     IEnumerator DelayedTotalScoreCal()
     {
         yield return waitForSeconds;  // 대기
         TotalScoreCal();  // TotalScoreCal 실행
         StartCoroutine(DelayedMove());
+    }
+    IEnumerator DelayedMove()
+    {
+        yield return waitForSeconds;
+        DeleteMove();
     }
 
     public void TotalScoreCal()

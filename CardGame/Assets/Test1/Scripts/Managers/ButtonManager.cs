@@ -113,7 +113,7 @@ public class ButtonManager : MonoBehaviour
             // 위치를 HandCardPoints로 이동
             PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
                 DOMove(HandCardPoints.DeleteCardpos.transform.position, 0.5f);
-            // 회전 0
+
             PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
                 DORotate(new Vector3(58, 122, 71), 3);
 

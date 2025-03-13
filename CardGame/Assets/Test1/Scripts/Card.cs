@@ -138,7 +138,7 @@ public class Card : MonoBehaviour
             cardPrefabs.DOScale(new Vector3(0.65f, 0.65f, 0.65f), 0.1f).
             OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.2f); });
         }
-
+        
         
         if (PokerManager.Instance.SuitIDdata.Count >= 0)
         {

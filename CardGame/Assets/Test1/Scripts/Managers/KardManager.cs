@@ -168,7 +168,6 @@ public class KardManager : MonoBehaviour
             results.Add(new PRS(targetPos, targetRot, scale));
         }
         return results;
-
     }
 
     public void AddCardSpawn()
