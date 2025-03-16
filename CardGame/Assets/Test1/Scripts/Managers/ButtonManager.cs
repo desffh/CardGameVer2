@@ -66,7 +66,6 @@ public class ButtonManager : MonoBehaviour
     {
         GameManager.Instance.DeCountHand();
 
-        
 
         for (int i  = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
         {
