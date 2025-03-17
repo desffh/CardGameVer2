@@ -55,14 +55,15 @@ namespace UnityEditor.Tilemaps
 
         public Rect guiRect
         {
-            get => m_GUIRect;
+            get { return m_GUIRect; }
             set
             {
-                if (m_GUIRect == value)
-                    return;
-                var oldValue = m_GUIRect;
-                m_GUIRect = value;
-                OnViewSizeChanged(oldValue, m_GUIRect);
+                if (m_GUIRect != value)
+                {
+                    Rect oldValue = m_GUIRect;
+                    m_GUIRect = value;
+                    OnViewSizeChanged(oldValue, m_GUIRect);
+                }
             }
         }
 
@@ -74,7 +75,6 @@ namespace UnityEditor.Tilemaps
         [SerializeField] public bool m_CameraPositionSaved;
         [SerializeField] public Vector3 m_CameraPosition;
         [SerializeField] public float m_CameraOrthographicSize;
-        [SerializeField] public GridLayout.CellSwizzle m_CameraSwizzleView;
 
         private BoundsInt? m_ActivePick;
         private Vector3Int m_ActivePivot;
@@ -208,8 +208,8 @@ namespace UnityEditor.Tilemaps
         {
             get
             {
-                var min = Vector3Int.FloorToInt(paddedBounds.min);
-                var max = Vector3Int.CeilToInt(paddedBounds.max);
+                Vector3Int min = grid.LocalToCell(paddedBounds.min);
+                Vector3Int max = grid.LocalToCell(paddedBounds.max) + Vector3Int.one;
                 return new RectInt(min.x, min.y, max.x - min.x, max.y - min.y);
             }
         }
@@ -319,96 +319,13 @@ namespace UnityEditor.Tilemaps
             m_PreviewUtility.camera.farClipPlane = 100f;
         }
 
-        private Vector3 GetCameraPositionFromXYZ(Vector3 xyzPosition)
-        {
-            var position = Grid.Swizzle(m_CameraSwizzleView, xyzPosition);
-            position = GetCameraPosition(position);
-            return position;
-        }
-
-        private Vector3 GetCameraPosition(Vector3 xyzPosition)
-        {
-            var position = xyzPosition;
-            switch (m_CameraSwizzleView)
-            {
-                case GridLayout.CellSwizzle.XZY:
-                    {
-                        position.y = 10f;
-                    }
-                    break;
-                case GridLayout.CellSwizzle.YZX:
-                    {
-                        position.y = -10f;
-                    }
-                    break;
-                case GridLayout.CellSwizzle.ZYX:
-                    {
-                        position.x = 10f;
-                    }
-                    break;
-                case GridLayout.CellSwizzle.ZXY:
-                    {
-                        position.x = -10f;
-                    }
-                    break;
-                case GridLayout.CellSwizzle.YXZ:
-                    {
-                        position.z = 10f;
-                    }
-                    break;
-                case GridLayout.CellSwizzle.XYZ:
-                default:
-                    {
-                        position.z = -10f;
-                    }
-                    break;
-            }
-            return position;
-        }
-
         private void ResetPreviewCamera()
         {
             var transform = m_PreviewUtility.camera.transform;
-
-            transform.position = GetCameraPositionFromXYZ(Vector3.zero);
-            switch (m_CameraSwizzleView)
-            {
-                case GridLayout.CellSwizzle.XZY:
-                    {
-                        transform.rotation = Quaternion.LookRotation(new Vector3(0, -1, 0), new Vector3(0, 0, 1));
-                    }
-                    break;
-                case GridLayout.CellSwizzle.YZX:
-                    {
-                        transform.rotation = Quaternion.LookRotation(new Vector3(0, 1, 0), new Vector3(1, 0, 0));
-                    }
-                    break;
-                case GridLayout.CellSwizzle.ZXY:
-                    {
-                        transform.rotation = Quaternion.LookRotation(new Vector3(1, 0, 0), new Vector3(0, 0, 1));
-                    }
-                    break;
-                case GridLayout.CellSwizzle.ZYX:
-                    {
-                        transform.rotation = Quaternion.LookRotation(new Vector3(-1, 0, 0), new Vector3(0, 1, 0));
-                    }
-                    break;
-                case GridLayout.CellSwizzle.YXZ:
-                    {
-                        transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, -1), new Vector3(1, 0, 0));
-                    }
-                    break;
-                case GridLayout.CellSwizzle.XYZ:
-                default:
-                    {
-                        transform.rotation = Quaternion.identity;
-                    }
-                    break;
-            }
-
+            transform.position = new Vector3(0, 0, -10f);
+            transform.rotation = Quaternion.identity;
             m_PreviewUtility.camera.nearClipPlane = 0.01f;
             m_PreviewUtility.camera.farClipPlane = 100f;
-
             FrameEntirePalette();
         }
 
@@ -454,10 +371,9 @@ namespace UnityEditor.Tilemaps
                 m_PaletteInstance.transform.rotation = Quaternion.identity;
                 m_PaletteInstance.transform.localScale = Vector3.one;
 
-                var paletteAsset = GridPaletteUtility.GetGridPaletteFromPaletteAsset(palette);
+                GridPalette paletteAsset = GridPaletteUtility.GetGridPaletteFromPaletteAsset(palette);
                 if (paletteAsset != null)
                 {
-                    // Handle Cell Sizing for Palette
                     if (paletteAsset.cellSizing == GridPalette.CellSizing.Automatic)
                     {
                         var paletteGrid = m_PaletteInstance.GetComponent<Grid>();
@@ -471,15 +387,8 @@ namespace UnityEditor.Tilemaps
                         }
                     }
 
-                    // Handle Transparency Sort Settings
                     m_PreviewUtility.camera.transparencySortMode = paletteAsset.transparencySortMode;
                     m_PreviewUtility.camera.transparencySortAxis = paletteAsset.transparencySortAxis;
-
-                    // Handle Camera View for Grid
-                    m_CameraSwizzleView = GridLayout.CellSwizzle.XYZ;
-                    var instanceGrid = m_PaletteInstance.GetComponent<Grid>();
-                    if (instanceGrid != null)
-                        m_CameraSwizzleView = instanceGrid.cellSwizzle;
                 }
                 else
                 {
@@ -510,8 +419,6 @@ namespace UnityEditor.Tilemaps
                     GridSelection.Select(transform.gameObject, previousGridSelectionPosition);
                 }
             }
-
-            m_DelayedResetPaletteInstance = false;
         }
 
         public void DestroyPreviewInstance()
@@ -552,7 +459,7 @@ namespace UnityEditor.Tilemaps
                 return;
 
             var position = grid.CellToLocalInterpolated(new Vector3(rect.center.x, rect.center.y, 0));
-            position = GetCameraPosition(position);
+            position.z = -10f;
 
             var height = (grid.CellToLocal(new Vector3Int(0, rect.yMax, 0)) - grid.CellToLocal(new Vector3Int(0, rect.yMin, 0))).magnitude;
             var width = (grid.CellToLocal(new Vector3Int(rect.xMax, 0, 0)) - grid.CellToLocal(new Vector3Int(rect.xMin, 0, 0))).magnitude;
@@ -687,10 +594,8 @@ namespace UnityEditor.Tilemaps
 
             if (m_DelayedResetPaletteInstance)
             {
-                var originalSwizzleView = m_CameraSwizzleView;
                 ResetPreviewInstance();
-                if (palette != null && originalSwizzleView != m_CameraSwizzleView)
-                    ResetPreviewCamera();
+                m_DelayedResetPaletteInstance = false;
             }
 
             if (palette == null)
@@ -953,49 +858,28 @@ namespace UnityEditor.Tilemaps
             float cameraOrthographicSize = cam.orthographicSize;
             Rect r = paddedBounds;
 
-            var camPos = cam.transform.position;
-            var camLimit = Grid.Swizzle(m_CameraSwizzleView, new Vector3(cameraOrthographicSize * (guiRect.width / guiRect.height), cameraOrthographicSize));
-            var camMin = camPos - camLimit;
-            var camMax = camPos + camLimit;
-            var rMin = Grid.Swizzle(m_CameraSwizzleView, r.min);
-            var rMax = Grid.Swizzle(m_CameraSwizzleView, r.max);
+            Vector3 camPos = cam.transform.position;
+            Vector2 camMin = camPos - new Vector3(cameraOrthographicSize * (guiRect.width / guiRect.height), cameraOrthographicSize);
+            Vector2 camMax = camPos + new Vector3(cameraOrthographicSize * (guiRect.width / guiRect.height), cameraOrthographicSize);
 
-            if (m_CameraSwizzleView != GridLayout.CellSwizzle.ZXY && m_CameraSwizzleView != GridLayout.CellSwizzle.ZYX)
+            if (camMin.x < r.min.x)
             {
-                if (camMin.x < rMin.x)
-                {
-                    camPos += new Vector3(rMin.x - camMin.x, 0f, 0f);
-                }
-                if (camMax.x > rMax.x)
-                {
-                    camPos += new Vector3(rMax.x - camMax.x, 0f, 0f);
-                }
+                camPos += new Vector3(r.min.x - camMin.x, 0f, 0f);
+            }
+            if (camMin.y < r.min.y)
+            {
+                camPos += new Vector3(0f, r.min.y - camMin.y, 0f);
+            }
+            if (camMax.x > r.max.x)
+            {
+                camPos += new Vector3(r.max.x - camMax.x, 0f, 0f);
+            }
+            if (camMax.y > r.max.y)
+            {
+                camPos += new Vector3(0f, r.max.y - camMax.y, 0f);
             }
 
-            if (m_CameraSwizzleView != GridLayout.CellSwizzle.XZY && m_CameraSwizzleView != GridLayout.CellSwizzle.YZX)
-            {
-                if (camMin.y < rMin.y)
-                {
-                    camPos += new Vector3(0f, rMin.y - camMin.y, 0f);
-                }
-
-                if (camMax.y > rMax.y)
-                {
-                    camPos += new Vector3(0f, rMax.y - camMax.y, 0f);
-                }
-            }
-
-            if (m_CameraSwizzleView != GridLayout.CellSwizzle.XYZ && m_CameraSwizzleView != GridLayout.CellSwizzle.YXZ)
-            {
-                if (camMin.z < rMin.z)
-                {
-                    camPos += new Vector3(0f, 0f, rMin.z - camMin.z);
-                }
-                if (camMax.z > rMax.z)
-                {
-                    camPos += new Vector3(0f, 0f, rMax.z - camMax.z);
-                }
-            }
+            camPos.Set(camPos.x, camPos.y, -10f);
 
             cam.transform.position = camPos;
 
@@ -1071,9 +955,8 @@ namespace UnityEditor.Tilemaps
         {
             // MeshTopology.Lines doesn't give nice pixel perfect grid so we have to have separate codepath with MeshTopology.Quads specially for palette window here
             if (m_GridMesh == null && grid.cellLayout == GridLayout.CellLayout.Rectangle)
-            {
-                m_GridMesh = GridEditorUtility.GenerateCachedGridMesh(grid, k_GridColor, 1f / LocalToScreenRatio(), paddedBoundsInt, grid.cellSwizzle == GridLayout.CellSwizzle.XYZ ? MeshTopology.Quads : MeshTopology.Lines);
-            }
+                m_GridMesh = GridEditorUtility.GenerateCachedGridMesh(grid, k_GridColor, 1f / LocalToScreenRatio(), paddedBoundsInt, MeshTopology.Quads);
+
             GridEditorUtility.DrawGridGizmo(grid, grid.transform, k_GridColor, ref m_GridMesh, ref m_GridMaterial);
         }
 
@@ -1150,7 +1033,7 @@ namespace UnityEditor.Tilemaps
                         GUI.changed = true;
                     }
                 }
-                    break;
+                break;
                 case EventType.DragPerform:
                 {
                     if (m_HoverData == null || m_HoverData.Count == 0)
@@ -1206,15 +1089,15 @@ namespace UnityEditor.Tilemaps
                     Event.current.Use();
                     GUIUtility.ExitGUI();
                 }
-                    break;
+                break;
                 case EventType.Repaint:
                     // Handled in Render()
                     break;
             }
 
             if (m_HoverData != null && (
-                    Event.current.type == EventType.DragExited ||
-                    Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape))
+                Event.current.type == EventType.DragExited ||
+                Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape))
             {
                 DragAndDrop.visualMode = DragAndDropVisualMode.None;
                 FlushHoverData();
@@ -1402,10 +1285,9 @@ namespace UnityEditor.Tilemaps
 
         protected override Vector2Int ScreenToGrid(Vector2 screenPosition)
         {
-            Vector3 local = ScreenToLocal(screenPosition);
-            var localS = Grid.Swizzle(m_CameraSwizzleView, local);
-            var result3 = grid.LocalToCell(localS);
-            var result = new Vector2Int(result3.x, result3.y);
+            Vector2 local = ScreenToLocal(screenPosition);
+            Vector3Int result3 = grid.LocalToCell(local);
+            Vector2Int result = new Vector2Int(result3.x, result3.y);
             return result;
         }
 
@@ -1566,24 +1448,22 @@ namespace UnityEditor.Tilemaps
 
         public Vector2 GridToScreen(Vector2 gridPosition)
         {
-            var gridPosition3 = new Vector3(gridPosition.x, gridPosition.y, 0);
+            Vector3 gridPosition3 = new Vector3(gridPosition.x, gridPosition.y, 0);
             return LocalToScreen(grid.CellToLocalInterpolated(gridPosition3));
         }
 
         public Vector2 ScreenToLocal(Vector2 screenPosition)
         {
-            var viewPosition = m_PreviewUtility.camera.transform.position;
-            Vector2 viewXYPosition = Grid.InverseSwizzle(m_CameraSwizzleView, viewPosition);
+            Vector2 viewPosition = m_PreviewUtility.camera.transform.position;
             screenPosition -= new Vector2(guiRect.xMin, guiRect.yMin);
-            var offsetFromCenter = new Vector2(screenPosition.x - guiRect.width * .5f, guiRect.height * .5f - screenPosition.y);
-            return viewXYPosition + offsetFromCenter / LocalToScreenRatio();
+            Vector2 offsetFromCenter = new Vector2(screenPosition.x - guiRect.width * .5f, guiRect.height * .5f - screenPosition.y);
+            return viewPosition + offsetFromCenter / LocalToScreenRatio();
         }
 
         protected Vector2 LocalToScreen(Vector2 localPosition)
         {
-            var viewPosition = m_PreviewUtility.camera.transform.position;
-            Vector2 viewXYPosition = Grid.InverseSwizzle(m_CameraSwizzleView, viewPosition);
-            var offsetFromCenter = new Vector2(localPosition.x - viewXYPosition.x, viewXYPosition.y - localPosition.y);
+            Vector2 viewPosition = m_PreviewUtility.camera.transform.position;
+            Vector2 offsetFromCenter = new Vector2(localPosition.x - viewPosition.x, viewPosition.y - localPosition.y);
             return offsetFromCenter * LocalToScreenRatio() + new Vector2(guiRect.width * .5f + guiRect.xMin, guiRect.height * .5f + guiRect.yMin);
         }
 
