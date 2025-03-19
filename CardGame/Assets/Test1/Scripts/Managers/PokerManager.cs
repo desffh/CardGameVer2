@@ -20,15 +20,12 @@ public struct SuitIDdata
 }
 
 
-public class PokerManager : MonoBehaviour
+public class PokerManager : Singleton<PokerManager>
 {
     // 최대 5개의 카드를 넣어둘 리스트
     [SerializeField] public List<SuitIDdata> SuitIDdata = new List<SuitIDdata>(5);
 
     [SerializeField] TextManager TextManager;
-
-    private static PokerManager instance;
-    public static PokerManager Instance { get { return instance; } }
 
     // 저장해둘 숫자
     public List<int> saveNum;
@@ -36,24 +33,13 @@ public class PokerManager : MonoBehaviour
     // 숫자가 몇번 등장하는지 저장할 딕셔너리 (숫자, 몇번 등장하는지)
     [SerializeField] private Dictionary<int, int> dictionary;
 
-    private void Awake()
+    protected override void Awake()
     {
-
+        base.Awake();
 
         saveNum = new List<int>();
 
         dictionary = new Dictionary<int, int>();
-
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
     }
 
     // 활성화 된 카드의 숫자를 넣을 큐
@@ -249,8 +235,11 @@ public class PokerManager : MonoBehaviour
                 }
                 else
                 {
-                    saveNum.Add(firstElement.Key);  // 풀 하우스 (3장, 2장)
-                    saveNum.Add(lastElement.Key);
+                    // 풀 하우스 (3장, 2장 ) 모두 넣기 
+                    for (int i = 0; i < SuitIDdata.Count; i++)
+                    {
+                        saveNum.Add(SuitIDdata[i].id);
+                    }
                     TextManager.PokerTextUpdate("풀 하우스");
                     GameManager.Instance.PokerCalculate(40, 4);
 

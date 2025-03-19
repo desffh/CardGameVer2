@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     // 계산 이벤트
     public UnityEvent calculation;
@@ -22,22 +22,6 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] public int Hand;
     [SerializeField] public int Delete;
-
-
-    public static GameManager Instance { get; private set; }
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     // 숫자를 담고 하나씩 빼기 위한 큐
     private Queue<int> Num;
@@ -155,17 +139,17 @@ public class GameManager : MonoBehaviour
         UIupdate();
 
         // 다시 콜라이더 활성화
-        KardManager.Inst.card.StartCollider();
-        ButtonManager.instance.ButtonInactive();
+        KardManager.Instance.card.StartCollider();
+        ButtonManager.Instance.ButtonInactive();
 
         CheckReset();
 
         if(Hand <= 0)
         {
             StageEnd();
-
+            
         }
-        KardManager.Inst.AddCardSpawn();
+        KardManager.Instance.AddCardSpawn();
 
         yield break;
     }
@@ -301,19 +285,19 @@ public class GameManager : MonoBehaviour
         PokerManager.Instance.SuitIDdata.Clear();
         PokerManager.Instance.saveNum.Clear();
 
-        KardManager.Inst.AddCardSpawn();
+        KardManager.Instance.AddCardSpawn();
         UIupdate();
 
         // 다시 콜라이더 활성화
-        KardManager.Inst.card.StartCollider();
-        ButtonManager.instance.ButtonInactive();
+        KardManager.Instance.card.StartCollider();
+        ButtonManager.Instance.ButtonInactive();
         yield break;
     }
 
     public void StartDeleteCard()
     {
         // 버리는 동안 카드의 콜라이더 비활성화
-        KardManager.Inst.card.QuitCollider();
+        KardManager.Instance.card.QuitCollider();
 
         // 카드 비활성화 & 콜라이더 활성화 
         StartCoroutine(deleteCard());

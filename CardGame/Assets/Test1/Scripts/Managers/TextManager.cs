@@ -96,14 +96,14 @@ public class TextManager : MonoBehaviour
 
     public void BufferUpdate()
     {
-        TotalCards.text = KardManager.Inst.itemBuffer.Count.ToString()
-            + " / "+ KardManager.Inst.itemBuffer.Capacity.ToString();
+        TotalCards.text = KardManager.Instance.itemBuffer.Count.ToString()
+            + " / "+ KardManager.Instance.itemBuffer.Capacity.ToString();
     }
 
     public void HandCardUpdate()
     {
-        HandCards.text = (KardManager.Inst.myCards.Capacity - PokerManager.Instance.SuitIDdata.Count).ToString() + " / "
-            + KardManager.Inst.myCards.Capacity.ToString();
+        HandCards.text = (KardManager.Instance.myCards.Capacity - PokerManager.Instance.SuitIDdata.Count).ToString() + " / "
+            + KardManager.Instance.myCards.Capacity.ToString();
     }
 
     /*[SerializeField] private GameObject parentTransform;

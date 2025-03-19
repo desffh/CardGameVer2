@@ -5,10 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class ButtonManager : MonoBehaviour
+public class ButtonManager : Singleton<ButtonManager>
 {
-    public static ButtonManager instance { get; private set; }
-
     [SerializeField] Button Handbutton;
     [SerializeField] Button Treshbutton;
 
@@ -19,18 +17,6 @@ public class ButtonManager : MonoBehaviour
     // 버튼 활성화 상태 여부
     private bool isButtonActive = true;
 
-
-    private void Awake()
-    {
-        if(instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     private void Start()
     {
@@ -82,14 +68,14 @@ public class ButtonManager : MonoBehaviour
             PokerManager.Instance.SuitIDdata[i].Cardclone.transform.rotation = Quaternion.identity;
 
             // myCards 리스트에서 해당 카드 제거 (버퍼에서 가져와서 저장하는 곳)
-            if (selectedCard != null && KardManager.Inst.myCards.Contains(selectedCard))
+            if (selectedCard != null && KardManager.Instance.myCards.Contains(selectedCard))
             {
-                KardManager.Inst.myCards.Remove(selectedCard);
+                KardManager.Instance.myCards.Remove(selectedCard);
             }
         }
         // 남은 카드들 재정렬 되기
-        KardManager.Inst.SetOriginOrder();
-        KardManager.Inst.CardAlignment();
+        KardManager.Instance.SetOriginOrder();
+        KardManager.Instance.CardAlignment();
 
         // 더하기 계산
         GameManager.Instance.Calculation();
@@ -117,17 +103,17 @@ public class ButtonManager : MonoBehaviour
                 DORotate(new Vector3(58, 122, 71), 3);
 
             // myCards 리스트에서 해당 카드 제거 (버퍼에서 가져와서 저장하는 곳)
-            if (selectedCard != null && KardManager.Inst.myCards.Contains(selectedCard))
+            if (selectedCard != null && KardManager.Instance.myCards.Contains(selectedCard))
             {
-                KardManager.Inst.myCards.Remove(selectedCard);
+                KardManager.Instance.myCards.Remove(selectedCard);
             }
         }
 
         GameManager.Instance.StartDeleteCard();
 
         // 남은 카드들 재정렬 되기
-        KardManager.Inst.SetOriginOrder();
-        KardManager.Inst.CardAlignment();
+        KardManager.Instance.SetOriginOrder();
+        KardManager.Instance.CardAlignment();
 
     }
 

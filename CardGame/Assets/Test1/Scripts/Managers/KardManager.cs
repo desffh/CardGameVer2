@@ -3,23 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class KardManager : MonoBehaviour
+public class KardManager : Singleton<KardManager>
 {
-    // 싱글톤
-    public static KardManager Inst { get; private set; }
-
-    private void Awake()
-    {
-        if( Inst == null)
-        {
-            Inst = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     // private지만 에디터에서 보이게
     [SerializeField] ItemDataReader ItemDataReader;
 

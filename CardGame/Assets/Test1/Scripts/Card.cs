@@ -154,9 +154,9 @@ public class Card : MonoBehaviour
     {
         Debug.Log("카드들 콜라이더 비활성화");
 
-        for (int i = 0; i < KardManager.Inst.myCards.Count; i++)
+        for (int i = 0; i < KardManager.Instance.myCards.Count; i++)
         {
-            KardManager.Inst.myCards[i].Collider2D.enabled = false;
+            KardManager.Instance.myCards[i].Collider2D.enabled = false;
         }
     }
 
@@ -164,9 +164,9 @@ public class Card : MonoBehaviour
     public void StartCollider()
     {
         Debug.Log("카드들 콜라이더 활성화");
-        for(int i = 0; i < KardManager.Inst.myCards.Count; i++)
+        for(int i = 0; i < KardManager.Instance.myCards.Count; i++)
         {
-            KardManager.Inst.myCards[i].Collider2D.enabled = true;  
+            KardManager.Instance.myCards[i].Collider2D.enabled = true;  
         }
     }
 }
