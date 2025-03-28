@@ -16,8 +16,6 @@ public class GameManager : Singleton<GameManager>
 
     WaitForSeconds waitForSeconds;
 
-
-
     // 핸드 횟수 & 버리기 횟수
     
     [SerializeField] public int Hand;
@@ -26,8 +24,8 @@ public class GameManager : Singleton<GameManager>
     // 숫자를 담고 하나씩 빼기 위한 큐
     private Queue<int> Num;
 
-    [SerializeField] public int Plussum;
-    [SerializeField] public int Multiplysum;
+    [SerializeField] public int PlusSum;
+    [SerializeField] public int MultiplySum;
     [SerializeField] public int TotalScore;
 
     [SerializeField] TextManager textManager;
@@ -37,8 +35,8 @@ public class GameManager : Singleton<GameManager>
     {
         waitForSeconds = new WaitForSeconds(1.0f);
 
-        Plussum = 0;
-        Multiplysum = 0;
+        PlusSum = 0;
+        MultiplySum = 0;
         TotalScore = 0;
 
         Num = new Queue<int>();
@@ -94,17 +92,26 @@ public class GameManager : Singleton<GameManager>
     // 다 판별하고 버리기
     private void DeleteMove()
     {
-        for (int i = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
+        for (int i = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
         {
             // 저장된 프리팹의 위치값을 변경하기 위해 컴포넌트 가져오기
-            PokerManager.Instance.SuitIDdata[i].Cardclone.GetComponent<Transform>();
+            //PokerManager.Instance.SuitIDdata[i].Cardclone.GetComponent<Transform>();
+
+            PokerManager.Instance.CardIDdata[i].transform.GetComponent<Transform>();
+
+            PokerManager.Instance.CardIDdata[i].transform.
+                DOMove(deleteCardPoint.DeleteCardpos.transform.position, 1).SetDelay(i * 0.2f);
+
+            PokerManager.Instance.CardIDdata[i].transform.
+                DORotate(new Vector3(-45, -60, -25), 0.5f).SetDelay(i * 0.2f);
 
             // 위치를 HandCardPoints로 이동
-            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
-                DOMove(deleteCardPoint.DeleteCardpos.transform.position, 1).SetDelay(i * 0.2f);
+            //PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
+            //DOMove(deleteCardPoint.DeleteCardpos.transform.position, 1).SetDelay(i * 0.2f);
+
             // 회전 0
-            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
-                DORotate(new Vector3(-45,-60,-25),0.5f).SetDelay(i * 0.2f);
+            //PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
+               // DORotate(new Vector3(-45,-60,-25),0.5f).SetDelay(i * 0.2f);
 
             StartCoroutine(delayActive());
         }
@@ -120,9 +127,11 @@ public class GameManager : Singleton<GameManager>
 
     public void DelaySetActive()
     {
-        for (int i = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
+        for (int i = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
         {
-            PokerManager.Instance.SuitIDdata[i].Cardclone.SetActive(false);
+            //PokerManager.Instance.SuitIDdata[i].Cardclone.SetActive(false);
+
+            PokerManager.Instance.CardIDdata[i].gameObject.SetActive(false);
         }
     }
 
@@ -134,13 +143,11 @@ public class GameManager : Singleton<GameManager>
         DelaySetActive();
 
         // 계산 다 하고 리스트 초기화
-        PokerManager.Instance.SuitIDdata.Clear();
+        PokerManager.Instance.CardIDdata.Clear();
         PokerManager.Instance.saveNum.Clear();
         UIupdate();
 
-        // 다시 콜라이더 활성화
-        KardManager.Instance.card.StartCollider();
-        ButtonManager.Instance.ButtonInactive();
+        
 
         CheckReset();
 
@@ -150,6 +157,10 @@ public class GameManager : Singleton<GameManager>
             
         }
         KardManager.Instance.AddCardSpawn();
+
+        // 다시 콜라이더 활성화
+        KardManager.Instance.card.StartCollider();
+        ButtonManager.Instance.ButtonInactive();
 
         yield break;
     }
@@ -178,7 +189,7 @@ public class GameManager : Singleton<GameManager>
         {
             // 큐에서 빼면서 체크
             int saveNumber = Num.Dequeue();
-            Plussum += saveNumber;
+            PlusSum += saveNumber;
 
             // 애니메이션 호출
             animationManager.PlayCardAnime(SaveNumber(saveNumber));
@@ -186,7 +197,7 @@ public class GameManager : Singleton<GameManager>
             // 타이핑 모션 (카드 위에 생성) - 함수를 호출
             //textManager.IndexScore(saveNumber);
         }
-        textManager.PlusTextUpdate(Plussum);
+        textManager.PlusTextUpdate(PlusSum);
     }
     
     // 애니메이션을 호출하기 위해 사용
@@ -195,11 +206,11 @@ public class GameManager : Singleton<GameManager>
     private bool[] savenumberCheck = new bool[5];
     public GameObject SaveNumber(int saveNumber)
     {
-        for (int i = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
+        for (int i = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
         {
-            if (savenumberCheck[i] == false && PokerManager.Instance.SuitIDdata[i].id == saveNumber)
+            if (savenumberCheck[i] == false && PokerManager.Instance.CardIDdata[i].itemdata.id == saveNumber)
             {
-                game = PokerManager.Instance.SuitIDdata[i].Cardclone;
+                game = PokerManager.Instance.CardIDdata[i].gameObject;
 
                 savenumberCheck[i] = true;
                 // 리스트에서 제거해버리면 deleteZone으로 이동할 수 없음
@@ -209,7 +220,8 @@ public class GameManager : Singleton<GameManager>
         }
         return game;
     }
-
+    
+    
     
     /*
     // 카드 개별 점수 텍스트 애니메이션을 호출하기 위해 사용
@@ -247,14 +259,13 @@ public class GameManager : Singleton<GameManager>
     // 족보 룰 점수
     public void PokerCalculate(int plus, int multiple)
     {
-        if (PokerManager.Instance.SuitIDdata.Count > 0)
+        if (PokerManager.Instance.CardIDdata.Count > 0)
         {
-            Plussum += plus;
+            PlusSum += plus;
             
-
-            Multiplysum += multiple;
+            MultiplySum += multiple;
         }
-        textManager.PokerUpdate(Plussum, Multiplysum);
+        textManager.PokerUpdate(PlusSum, MultiplySum);
     }
 
 
@@ -272,7 +283,7 @@ public class GameManager : Singleton<GameManager>
 
     public void TotalScoreCal()
     {
-        TotalScore += Plussum * Multiplysum;
+        TotalScore += PlusSum * MultiplySum;
         textManager.TotalScoreUpdate(TotalScore);
     }
 
@@ -282,7 +293,7 @@ public class GameManager : Singleton<GameManager>
         DelaySetActive();
 
         // 리스트 초기화
-        PokerManager.Instance.SuitIDdata.Clear();
+        PokerManager.Instance.CardIDdata.Clear();
         PokerManager.Instance.saveNum.Clear();
 
         KardManager.Instance.AddCardSpawn();

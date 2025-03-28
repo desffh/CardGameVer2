@@ -55,17 +55,17 @@ MonoBehaviour:
   spriteCards: {fileID: 0}
   spriteCards2: {fileID: 0}
   Collider2D: {fileID: 7758442722237426489}
-  itemdata:
-    name: 
-    id: 0
-    suit: 
-    front: 
   spriteSheetName: 
   spriteNameToLoad: 
   originPRS:
     pos: {x: 0, y: 0, z: 0}
     rot: {x: 0, y: 0, z: 0, w: 0}
     scale: {x: 0, y: 0, z: 0}
+  itemdata:
+    name: 
+    id: 0
+    suit: 
+    front: 
   checkCard: 0
 --- !u!114 &-982333530242807510
 MonoBehaviour:
@@ -87,7 +87,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:

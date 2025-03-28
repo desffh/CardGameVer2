@@ -37,9 +37,4 @@ public class AnimationManager : MonoBehaviour
         cardPrefabs.transform.DOScale(new Vector3(0.8f, 0.8f, 0.8f), 0.5f).
             OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.3f); });
     }
-
-    //public void IndexScoreAnime(GameObject text, float duration)
-    //{
-    //    // duration : 대사가 출력되는 데 걸리는 시간
-    //}
 }

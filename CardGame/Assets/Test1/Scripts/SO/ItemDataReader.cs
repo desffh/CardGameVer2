@@ -25,6 +25,8 @@ public struct ItemData
 }
 
 [CreateAssetMenu(fileName = "Reader", menuName = "Scriptable Object/ItemDataReader", order = int.MaxValue)]
+
+// 구조체 타입으로 데이터를 받아오고 ItemData구조체 타입의 리스트에 저장한다
 public class ItemDataReader : DataReaderBase
 {
     [Header("스프레드시트에서 읽혀져 직렬화 된 오브젝트")]

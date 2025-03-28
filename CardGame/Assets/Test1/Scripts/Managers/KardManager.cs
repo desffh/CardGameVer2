@@ -5,37 +5,41 @@ using UnityEngine.Events;
 
 public class KardManager : Singleton<KardManager>
 {
-    // private지만 에디터에서 보이게
+    // 참조
     [SerializeField] ItemDataReader ItemDataReader;
+    [SerializeField] public Card card;
 
-    // ItemData 타입을 담을 List 선언 (리스트는 동적배열 - 아직 크기 할당 안된 상태)
+    // ItemData 타입을 담을 List 선언
     [SerializeField] public List<ItemData> itemBuffer;
 
-    [SerializeField] public List<Card> myCards; // Card 타입을 담을 리스트 (내 카드)
+    // Card 타입을 담을 리스트 (내 카드)
+    [SerializeField] public List<Card> myCards;
 
-    [SerializeField] Transform cardSpawnPoint; // 카드 생성위치 가져오기 
-
-    [SerializeField] public Card card;
+    // 카드 생성위치
+    [SerializeField] Transform cardSpawnPoint; 
 
     // 카드 정렬 시작, 끝 위치
     [SerializeField] Transform myCardLeft;
     [SerializeField] Transform myCardRight;
 
-    // 부모 게임 오브젝트 할당
-    [SerializeField] private GameObject ParentCardPrefab;
+    // 에디터에서 카드 프리팹 연결 (Instantiate)
+    [SerializeField] GameObject cardPrefabs;
+    
+    // 부모 게임 오브젝트 할당 (배치될 위치)
+    [SerializeField] GameObject ParentCardPrefab;
 
-    // 리스트에 아이템을 넣어줄 함수
+    // 버퍼에 카드 넣기
     void SetupItemBuffer()
     {
         // 크기 동적할당
-        itemBuffer = new List<ItemData>(52); // 미리 용량을 잡아두기
+        itemBuffer = new List<ItemData>(52);
 
         for (int i = 0; i < 52; i++)
         {
+            // 각각의 스프레드 시트 정보를 담은 카드들을 itemBuffer에 저장
             ItemData item = ItemDataReader.DataList[i];
 
             itemBuffer.Add(item);
-
         }
         // 아이템 버퍼 안의 카드 섞기
         for (int i = 0; i < itemBuffer.Count; i++)
@@ -47,8 +51,7 @@ public class KardManager : Singleton<KardManager>
         }
     }
 
-
-    // 리스트에서 카드 뽑기
+    // 버퍼에서 카드 뽑기
     public ItemData PopItem()
     {
         // 다 뽑았으면 다시 버퍼 채우기 
@@ -62,9 +65,7 @@ public class KardManager : Singleton<KardManager>
         return item;
     }
 
-    // 에디터에서 카드 프리팹 연결
-    [SerializeField] GameObject cardPrefabs;
-
+    // 8장의 배치될 카드 추가 
     void AddCard()
     {
         if(myCards.Count < 8)
@@ -74,17 +75,19 @@ public class KardManager : Singleton<KardManager>
             // 부모의 아래에 생성 (하이라키창 계층구조)
             cardObject.transform.SetParent(ParentCardPrefab.transform);
         
+            // 동적 생성된카드 오브젝트
             var card = cardObject.GetComponent<Card>(); // 생성된 카드의 스크립트 가져오기 (Card)
-            card.Setup(PopItem());
+            card.Setup(PopItem()); // 뽑은 카드에 ItemData 정보 저장 & 스프라이트 셋팅
 
+            // 동적 생성된 카드 오브젝트는 Card 스크립트를 가지고 있어서 Card타입 리스트에 담을 수 있다
             myCards.Add(card);
         }
+        // 카드 정렬
         SetOriginOrder();
         CardAlignment();
     }
 
-
-    // 리스트 전체 정렬하기 (먼저 추가한 카드가 제일 뒷쪽에 보임)
+    // 리스트 전체 정렬 (먼저 추가한 카드가 제일 뒷쪽에 보임)
     public void SetOriginOrder()
     {
         int count = myCards.Count;
@@ -155,6 +158,7 @@ public class KardManager : Singleton<KardManager>
         return results;
     }
 
+    // 나중에 수정
     public void AddCardSpawn()
     {
         for (int i = myCards.Count; i < 8; i++) // 8장까지의 카드를 생성
@@ -167,9 +171,11 @@ public class KardManager : Singleton<KardManager>
     {
         SetupItemBuffer();
 
+        // 현재는 myCards 리스트에 저장되어있다 (8장의 카드 Card 타입)
         AddCardSpawn();
     }
 
+    // 배치된 카드 & 계산중인 카드 콜라이더 비활성화
     public void ColliderQuit()
     {   
         card.QuitCollider();

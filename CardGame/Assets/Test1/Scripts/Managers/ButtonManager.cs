@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class ButtonManager : Singleton<ButtonManager>
 {
-    [SerializeField] Button Handbutton;
-    [SerializeField] Button Treshbutton;
+    [SerializeField] Button Handbutton; // 핸드 플레이
+    [SerializeField] Button Treshbutton;//     버리기
 
     [SerializeField] HandCardPoints HandCardPoints;
 
@@ -16,7 +16,6 @@ public class ButtonManager : Singleton<ButtonManager>
 
     // 버튼 활성화 상태 여부
     private bool isButtonActive = true;
-
 
     private void Start()
     {
@@ -28,7 +27,7 @@ public class ButtonManager : Singleton<ButtonManager>
 
     private void Update()
     {
-       if(isButtonActive == true && GameManager.Instance.Hand > 0 && PokerManager.Instance.SuitIDdata.Count > 0) 
+       if(isButtonActive == true && GameManager.Instance.Hand > 0 && PokerManager.Instance.CardIDdata.Count > 0) 
        {
             Handbutton.interactable = true;
        }
@@ -36,7 +35,7 @@ public class ButtonManager : Singleton<ButtonManager>
        {
             Handbutton.interactable = false;
        }
-       if(isButtonActive == true && GameManager.Instance.Delete > 0 && PokerManager.Instance.SuitIDdata.Count > 0)
+       if(isButtonActive == true && GameManager.Instance.Delete > 0 && PokerManager.Instance.CardIDdata.Count > 0)
         {
             Treshbutton.interactable = true;
         }
@@ -52,20 +51,19 @@ public class ButtonManager : Singleton<ButtonManager>
     {
         GameManager.Instance.DeCountHand();
 
-
-        for (int i  = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
+        for (int i  = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
         {
             // 저장된 카드의 스크립트 가져오기
-            Card selectedCard =  PokerManager.Instance.SuitIDdata[i].Cardclone.GetComponent<Card>();
+            Card selectedCard =  PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Card>();
 
             // 저장된 프리팹의 위치값을 변경하기 위해 컴포넌트 가져오기
-            PokerManager.Instance.SuitIDdata[i].Cardclone.GetComponent<Transform>();
+            PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Transform>();
             
             // 위치를 HandCardPoints로 이동
-            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
+            PokerManager.Instance.CardIDdata[i].gameObject.transform.
                 DOMove(HandCardPoints.HandCardpos[i].transform.position, 0.5f);
            // 회전 0
-            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.rotation = Quaternion.identity;
+            PokerManager.Instance.CardIDdata[i].gameObject.transform.rotation = Quaternion.identity;
 
             // myCards 리스트에서 해당 카드 제거 (버퍼에서 가져와서 저장하는 곳)
             if (selectedCard != null && KardManager.Instance.myCards.Contains(selectedCard))
@@ -88,18 +86,18 @@ public class ButtonManager : Singleton<ButtonManager>
 
         isButtonActive = false;
 
-        for (int i = 0; i < PokerManager.Instance.SuitIDdata.Count; i++)
+        for (int i = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
         {
             // 저장된 카드의 스크립트 가져오기
-            Card selectedCard = PokerManager.Instance.SuitIDdata[i].Cardclone.GetComponent<Card>();
+            Card selectedCard = PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Card>();
 
             // 저장된 프리팹의 위치값을 변경하기 위해 컴포넌트 가져오기
-            PokerManager.Instance.SuitIDdata[i].Cardclone.GetComponent<Transform>();
+            PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<Transform>();
             // 위치를 HandCardPoints로 이동
-            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
+            PokerManager.Instance.CardIDdata[i].gameObject.transform.
                 DOMove(HandCardPoints.DeleteCardpos.transform.position, 0.5f);
 
-            PokerManager.Instance.SuitIDdata[i].Cardclone.transform.
+            PokerManager.Instance.CardIDdata[i].gameObject.transform.
                 DORotate(new Vector3(58, 122, 71), 3);
 
             // myCards 리스트에서 해당 카드 제거 (버퍼에서 가져와서 저장하는 곳)

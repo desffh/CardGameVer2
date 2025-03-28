@@ -4,26 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
-public struct SuitIDdata
-{
-    public string suit;
-    public int id;
-    public GameObject Cardclone;
-
-    public SuitIDdata(string suit, int id, GameObject cardclone)
-    {
-        this.suit = suit;
-        this.id = id;
-        this.Cardclone = cardclone;
-    }
-}
-
-
 public class PokerManager : Singleton<PokerManager>
 {
-    // 최대 5개의 카드를 넣어둘 리스트
-    [SerializeField] public List<SuitIDdata> SuitIDdata = new List<SuitIDdata>(5);
+    // 카드 타입을 담을 리스트 (최대 5개)
+    [SerializeField] public List<Card> CardIDdata = new List<Card>(5);
 
     [SerializeField] TextManager TextManager;
 
@@ -42,39 +26,19 @@ public class PokerManager : Singleton<PokerManager>
         dictionary = new Dictionary<int, int>();
     }
 
-    // 활성화 된 카드의 숫자를 넣을 큐
-
-    private void Start()
+    // 값을 가져오고 리스트에 저장 (순차적으로) / Card 타입을 받기
+    public void SaveSuitIDdata(Card card)
     {
-
-
-    }
-
-    // 값을 가져오고 리스트에 저장 (순차적으로)
-    public void SaveSuitIDdata(SuitIDdata newSuitIDdata)
-    {
-        SuitIDdata.Add(newSuitIDdata);
+        CardIDdata.Add(card);
 
         // LinQ메서드를 사용한 오름차순정렬 (value 값 (숫자 갯수) 기준으로)
-        SuitIDdata = SuitIDdata.OrderBy(x => x.id).ToList();
-
-        // Debug.Log(saveNum.Count); // 카운트가 0 미만이면 출력 x
-
-
-        // for (int i = 0; i < SuitIDdata.Count; i++)
-        // {
-        //     Debug.Log(SuitIDdata[i].id);
-        // }
-
+        CardIDdata = CardIDdata.OrderBy(x => x.itemdata.id).ToList();
     }
 
-    public void RemoveSuitIDdata(SuitIDdata newSuitIDdata)
+    public void RemoveSuitIDdata(Card card)
     {
-        // 리스트에서 같은 suit, id 값을 가진 객체 찾기
-        SuitIDdata existingData = SuitIDdata.Find(x => x.suit == newSuitIDdata.suit && x.id == newSuitIDdata.id);
-
         // 리스트에서 제거 
-        SuitIDdata.Remove(existingData);
+        CardIDdata.Remove(card);
     }
 
 
@@ -83,15 +47,15 @@ public class PokerManager : Singleton<PokerManager>
     {
         dictionary.Clear();
 
-        for (int i = 0; i < SuitIDdata.Count; i++)
+        for (int i = 0; i < CardIDdata.Count; i++)
         {
-            if (dictionary.ContainsKey(SuitIDdata[i].id))
+            if (dictionary.ContainsKey(CardIDdata[i].itemdata.id))
             {
-                dictionary[SuitIDdata[i].id]++;
+                dictionary[CardIDdata[i].itemdata.id]++;
             }
             else
             {
-                dictionary[SuitIDdata[i].id] = 1;
+                dictionary[CardIDdata[i].itemdata.id] = 1;
             }
         }
         return dictionary;
@@ -100,11 +64,11 @@ public class PokerManager : Singleton<PokerManager>
     // 스트레이트인지 확인 (ex 1 2 3 4 5)
     public bool isStraight()
     {
-        for (int i = 1; i < SuitIDdata.Count; i++)
+        for (int i = 1; i < CardIDdata.Count; i++)
         {
             // 현재카드와 바로 앞 카드의 숫자 차이가 1인지 확인
             // 하나라도 다르면 바로 false반환
-            if (SuitIDdata[i].id != SuitIDdata[i - 1].id + 1)
+            if (CardIDdata[i].itemdata.id != CardIDdata[i - 1].itemdata.id + 1)
             {
                 return false;
             }
@@ -116,12 +80,11 @@ public class PokerManager : Singleton<PokerManager>
     public bool isFlush()
     {
         // Suit타입을 저장할 변수
-
-        string firstSuit = SuitIDdata[0].suit;
-        for (int i = 0; i < SuitIDdata.Count; i++)
+        string firstSuit = CardIDdata[0].itemdata.suit;
+        for (int i = 0; i < CardIDdata.Count; i++)
         {
             // [0]번째와 hand 인덱스가 하나라도 다르면 false반환
-            if (SuitIDdata[i].suit != firstSuit)
+            if (CardIDdata[i].itemdata.suit != firstSuit)
             {
                 return false;
             }
@@ -133,9 +96,8 @@ public class PokerManager : Singleton<PokerManager>
     public void getHandType()
     {
         saveNum.Clear();
-        GameManager.Instance.Plussum = 0;
-        GameManager.Instance.Multiplysum = 0;
-
+        GameManager.Instance.PlusSum = 0;
+        GameManager.Instance.MultiplySum = 0;
 
         // 반환된 숫자 카운트 저장
         Dictionary<int, int> rankCount = Hand();
@@ -143,7 +105,7 @@ public class PokerManager : Singleton<PokerManager>
         bool flush = false;
         bool straight = false;
 
-        if (SuitIDdata.Count > 0)
+        if (CardIDdata.Count > 0)
         {
             flush = isFlush();
             straight = isStraight();
@@ -152,13 +114,14 @@ public class PokerManager : Singleton<PokerManager>
         var lastElement = rankCount.LastOrDefault(); // 마지막 요소
         var firstElement = rankCount.FirstOrDefault(); // 처음 요소
 
+         
 
         // 스트레이트 플러시 및 로얄 스트레이트 플러시 처리
-        if (SuitIDdata.Count == 5)
+        if (CardIDdata.Count == 5)
         {
             if (straight && flush)
             {
-                if (SuitIDdata[0].id == 10)
+                if (CardIDdata[0].itemdata.id == 10)
                 {
                     // 로얄 스트레이트 플러시: 10, J, Q, K, A
                     saveNum.Add(lastElement.Key);  // 로얄 스트레이트 플러시
@@ -169,9 +132,9 @@ public class PokerManager : Singleton<PokerManager>
                 else
                 {
                     // 스트레이트 플러시
-                    for (int i = 0; i < SuitIDdata.Count; i++)
+                    for (int i = 0; i < CardIDdata.Count; i++)
                     {
-                        saveNum.Add(SuitIDdata[i].id);
+                        saveNum.Add(CardIDdata[i].itemdata.id);
                     }
                     TextManager.PokerTextUpdate("스트레이트 플러시");
                     GameManager.Instance.PokerCalculate(100, 8);
@@ -183,9 +146,9 @@ public class PokerManager : Singleton<PokerManager>
             // 플러시
             if (flush)
             {
-                for (int i = 0; i < SuitIDdata.Count; i++)
+                for (int i = 0; i < CardIDdata.Count; i++)
                 {
-                    saveNum.Add(SuitIDdata[i].id);
+                    saveNum.Add(CardIDdata[i].itemdata.id);
                 }
                 TextManager.PokerTextUpdate("플러시");
                 GameManager.Instance.PokerCalculate(35, 4);
@@ -197,9 +160,9 @@ public class PokerManager : Singleton<PokerManager>
             // 스트레이트
             if (straight)
             {
-                for (int i = 0; i < SuitIDdata.Count; i++)
+                for (int i = 0; i < CardIDdata.Count; i++)
                 {
-                    saveNum.Add(SuitIDdata[i].id);
+                    saveNum.Add(CardIDdata[i].itemdata.id);
                 }
                 TextManager.PokerTextUpdate("스트레이트");
                 GameManager.Instance.PokerCalculate(30, 4);
@@ -236,9 +199,9 @@ public class PokerManager : Singleton<PokerManager>
                 else
                 {
                     // 풀 하우스 (3장, 2장 ) 모두 넣기 
-                    for (int i = 0; i < SuitIDdata.Count; i++)
+                    for (int i = 0; i < CardIDdata.Count; i++)
                     {
-                        saveNum.Add(SuitIDdata[i].id);
+                        saveNum.Add(CardIDdata[i].itemdata.id);
                     }
                     TextManager.PokerTextUpdate("풀 하우스");
                     GameManager.Instance.PokerCalculate(40, 4);
@@ -302,7 +265,7 @@ public class PokerManager : Singleton<PokerManager>
         }
 
         // 하이 카드 처리
-        if (SuitIDdata.Count != 0)
+        if (CardIDdata.Count != 0)
         {
             saveNum.Add(lastElement.Key); // 가장 큰 값
             TextManager.PokerTextUpdate("하이 카드");
@@ -313,7 +276,7 @@ public class PokerManager : Singleton<PokerManager>
         }
 
         // 리스트가 비어있다면 텍스트도 빈 값
-        if (SuitIDdata.Count == 0)
+        if (CardIDdata.Count == 0)
         {
             TextManager.PokerTextUpdate("");
             TextManager.PokerUpdate(0, 0);
@@ -322,9 +285,9 @@ public class PokerManager : Singleton<PokerManager>
 
     public void QuitCollider2()
     {
-        for (int i = 0; i < SuitIDdata.Count; i++)
+        for (int i = 0; i < CardIDdata.Count; i++)
         {
-            SuitIDdata[i].Cardclone.GetComponent<BoxCollider2D>().enabled = false;
+            CardIDdata[i].gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
 
     }

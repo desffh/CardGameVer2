@@ -102,7 +102,7 @@ public class TextManager : MonoBehaviour
 
     public void HandCardUpdate()
     {
-        HandCards.text = (KardManager.Instance.myCards.Capacity - PokerManager.Instance.SuitIDdata.Count).ToString() + " / "
+        HandCards.text = (KardManager.Instance.myCards.Capacity - PokerManager.Instance.CardIDdata.Count).ToString() + " / "
             + KardManager.Instance.myCards.Capacity.ToString();
     }
 

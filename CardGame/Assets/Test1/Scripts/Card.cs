@@ -25,21 +25,19 @@ public class Card : MonoBehaviour
 
     [SerializeField] BoxCollider2D Collider2D;
     
-    public ItemData itemdata;
-
     public string spriteSheetName;
     public string spriteNameToLoad;
 
     public PRS originPRS; // 카드 원본위치를 담은 PRS 클래스
 
-    [SerializeField] SuitIDdata SuitIDdata;
-
     // 모든 텍스쳐를 다 넣어둘 배열
     Sprite[] sprites;
 
-
+    // SetUp 함수로 뽑은 카드의 구조체 정보를 받아와서 저장
+    public ItemData itemdata;
     
-
+    // 카드가 눌렸는지 확인
+    [SerializeField] private bool checkCard = false;
 
     private void Awake()
     {
@@ -64,7 +62,6 @@ public class Card : MonoBehaviour
         // 모든 스프라이트 배열에 다 넣기
         sprites = Resources.LoadAll<Sprite>(spriteSheetName);
 
-
         if (sprites.Length > 0)
         {
             Sprite selctedSprite = sprites.FirstOrDefault(s => s.name == spriteName);
@@ -82,6 +79,7 @@ public class Card : MonoBehaviour
         }
     }
 
+    // 카드 정렬 애니메이션
     public void MoveTransform(PRS prs, bool useDotween, float dotweenTime = 0)
     {
         if (useDotween)
@@ -98,18 +96,15 @@ public class Card : MonoBehaviour
         }
     }
     
-    [SerializeField] private bool checkCard = false;
-
-    // 마우스로 클릭하면 리스트에 카드 넣기 (최대5개)
+    // 마우스로 클릭하면 CardIDdata 리스트에 카드 넣기 (최대5개)
     // 콜라이더가 부착된 Card오브젝트를 클릭 할 수 있다
     public void OnMouseDown()
-    { 
-
-        SuitIDdata suitidData = new SuitIDdata(itemdata.suit, itemdata.id, this.gameObject);
-
-        if (checkCard && PokerManager.Instance.SuitIDdata.Count <= 5)
+    {
+        // 리스트가 꽉 찼다면
+        if (checkCard && PokerManager.Instance.CardIDdata.Count <= 5)
         {
-            PokerManager.Instance.RemoveSuitIDdata(suitidData);
+            // 이 스크립트가 달린 Card를 매개변수로 전달
+            PokerManager.Instance.RemoveSuitIDdata(this);
             
             // 기존 위치로 이동
             cardPrefabs.DOMove(new Vector3(cardPrefabs.transform.position.x,
@@ -118,9 +113,10 @@ public class Card : MonoBehaviour
 
             checkCard = false;
         }
-        else if(PokerManager.Instance.SuitIDdata.Count < 5)
+        // 리스트가 덜 찼다면
+        else if(PokerManager.Instance.CardIDdata.Count < 5)
         {
-            PokerManager.Instance.SaveSuitIDdata(suitidData);
+            PokerManager.Instance.SaveSuitIDdata(this);
             
             // 클릭 애니메이션
             cardPrefabs.DOMove(new Vector3(cardPrefabs.transform.position.x,
@@ -132,31 +128,35 @@ public class Card : MonoBehaviour
         else
         {
             Debug.Log("더이상 카드를 누를 수 없음");
-            
-            //cardPrefabs.DORotate(new Vector3(0, 0, 10f), 0.2f);
+
             // 카드를 클릭하면 애니메이션
             cardPrefabs.DOScale(new Vector3(0.65f, 0.65f, 0.65f), 0.1f).
             OnComplete(() => { cardPrefabs.transform.DOScale(new Vector3(0.7f, 0.7f, 0.7f), 0.2f); });
         }
-        
-        
-        if (PokerManager.Instance.SuitIDdata.Count >= 0)
+             
+        // 족보 확인
+        if (PokerManager.Instance.CardIDdata.Count >= 0)
         {
             PokerManager.Instance.Hand();
             PokerManager.Instance.getHandType();
-            // Debug.Log(PokerManager.Instance.saveNum.Count); // 카운트가 0 미만이면 출력 x
-
         }
     }
 
-    // 콜라이더 비활성화
+    // 카드 콜라이더 비활성화
     public void QuitCollider()
     {
         Debug.Log("카드들 콜라이더 비활성화");
-
+        
+        // 소지중인 카드
         for (int i = 0; i < KardManager.Instance.myCards.Count; i++)
         {
             KardManager.Instance.myCards[i].Collider2D.enabled = false;
+        }
+
+        // 계산중인 카드
+        for (int i = 0; i < PokerManager.Instance.CardIDdata.Count; i++)
+        {
+            PokerManager.Instance.CardIDdata[i].gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
 
@@ -164,6 +164,7 @@ public class Card : MonoBehaviour
     public void StartCollider()
     {
         Debug.Log("카드들 콜라이더 활성화");
+
         for(int i = 0; i < KardManager.Instance.myCards.Count; i++)
         {
             KardManager.Instance.myCards[i].Collider2D.enabled = true;  
